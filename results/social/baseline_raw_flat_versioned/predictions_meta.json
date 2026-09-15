@@ -1,0 +1,14 @@
+{
+  "schema_version": "full_official_v1",
+  "model": "gpt-4o-mini-2024-07-18",
+  "temperature": 0,
+  "top_k": 10,
+  "conditions": [
+    "RAW",
+    "RAW+FLAT",
+    "RAW+VERSIONED"
+  ],
+  "prediction_count": 1031,
+  "predictions_sha256": "8cd42037202a98b7e6f9abfa7ca2f2133b778434696e67d6c816699b30f49819",
+  "gold_read": false
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "paper_external_temporal_episodes_v1",
+  "memory_schema_version": "temporal_episode_v2",
+  "extraction_and_attach_model": "gpt-4o-mini-2024-07-18",
+  "network_count": 5,
+  "session_count": 3570,
+  "turn_count": 51023,
+  "episode_count": 9298,
+  "stats": {
+    "networks": 5,
+    "sessions_processed": 3570,
+    "events_total": 16859,
+    "events_rejected": 4548,
+    "episodes_total": 9298,
+    "extraction_calls": 2294,
+    "attach_calls": 16854,
+    "total_new_calls": 19148,
+    "evidence_attempted": 22223,
+    "evidence_valid": 17376,
+    "rejected_reasons": {
+      "no_valid_evidence_quote": 4524,
+      "invalid_event_type": 9,
+      "exceeds_max_events_per_turn": 15
+    },
+    "clusters_by_network": {
+      "01": 723,
+      "02": 715,
+      "03": 723,
+      "04": 688,
+      "05": 721
+    }
+  },
+  "episodes_sha256": "2068fa9ca1a2e4507f855fbbccac5afd5c200ba22f0b871d328acd4622c2114d",
+  "qa_read": false,
+  "source_manifest": {
+    "benchmark": "EverMemBench-Dynamic",
+    "code_url": "https://github.com/EverMind-AI/EverMemBench.git",
+    "code_commit": "e10b3d52f0e4cfc5c124ad406b5d95c59c73738b",
+    "data_url": "https://huggingface.co/datasets/EverMind-AI/EverMemBench-Dynamic",
+    "data_commit": "a6b210a32248e841967b7b64a64281d2ff3f669d",
+    "files": {
+      "code/eval/config/pipeline.yaml": "2e43e3769852e93af43afbbb6a23009084b52af788937b426489426744d81355",
+      "code/eval/config/prompts.yaml": "b1259f6ebb93ba5c56b558414a0f0fa04f36cee7801a9cdd009f2e9706011542",
+      "data/01/dialogue.json": "16e4fc66c47eb742cc75097ab5ea6d95e1fae8963841391e58a8e4ec35ace2dc",
+      "data/02/dialogue.json": "37008035d1f7804a12079e4475f612a2b194b3c1c321c7a674e50d8ee57f4e0f",
+      "data/03/dialogue.json": "eeb18a989e6b4f59ae23d91fcc69d8ddbee8c917793c81ae623ecee9388dc8b5",
+      "data/04/dialogue.json": "3870ce44dfef56cebdc0236c19825eb0c5ea84e028b466e9f9fdb59349cbd56c",
+      "data/05/dialogue.json": "0434cd414d01ed4fb22e37c016ee647c3d0ea5e94fe1edf7d72dcf4ae42158e8"
+    },
+    "implementation": {
+      "evermembench_episode_run.py": "2839109d6e06409e58f201f55541d4b4b95ec0ffd31ce89446c76008c08010ef",
+      "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97",
+      "query_independent_episode_pipeline.py": "2fd9d106b69cfadf990285796db718c1f83afe23137577f54d518a0762ea50f5",
+      "temporal_episode_prototype.py": "eabdba46f397d0c807f95245f3b9c90006cd485643fa69f8fee37cf03a8d2dc0",
+      "PAPER_BENCHMARK_PROTOCOL.md": "4845c4e504c95229028babb7626c52cfab57954a5d51c4a2857673a03143c870"
+    }
+  },
+  "execution_runner": "evermembench_parallel_resume.py",
+  "execution_runner_sha256": "fc438611c63586f1267bf748d6ce3ed7a1cf65bea1ec0956aa01493268415d76",
+  "memory_workers": 5,
+  "shard_sha256": {
+    "01": "925b186e715d9b049eaec2d11c2c8c40f2647617ca814721adfa1274bc4375ce",
+    "02": "c5f194592c5fa86dba34dbf552472b8024679fbe0ebd2227ee8174aae2d71e15",
+    "03": "bf10aa43489f231a2da3d30690afca56a3c9c9bc7931fd5eeb25c306a9de00cd",
+    "04": "452bbc76559c8a2bbfeefad03207ecc5cd06f7ff0d419abb3803f6b0443a4df9",
+    "05": "7d4296340d0f1d70ba4fa498440049d80c77691276bbdcbf54aa20ed495228ca"
+  }
+}

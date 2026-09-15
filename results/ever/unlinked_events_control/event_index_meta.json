@@ -1,0 +1,36 @@
+{
+  "embedding_model": "text-embedding-3-large",
+  "source_episodes_sha256": "2068fa9ca1a2e4507f855fbbccac5afd5c200ba22f0b871d328acd4622c2114d",
+  "topics": {
+    "01": {
+      "events": 3292,
+      "docs_sha256": "d54e4f1db378f193dad9b431f66c0f9a99c5f9553a76b2cd70897c585c1df973",
+      "matrix_file": "events-01-d54e4f1db378f193dad9.npy",
+      "matrix_sha256": "4f6c7bb25b5de1675733d645fcf39480bb1bf494c2c9f1cc241653d1d5293236"
+    },
+    "02": {
+      "events": 3479,
+      "docs_sha256": "c8e9c369203458e91d4b10a06c4e6fb6602ddded1ee60c368829370b605cbd03",
+      "matrix_file": "events-02-c8e9c369203458e91d4b.npy",
+      "matrix_sha256": "7f9813e7258ba634f5e9946c7ab6591600402f06d3d822f8af0a3d7969ddb528"
+    },
+    "03": {
+      "events": 3821,
+      "docs_sha256": "667524525cace4ebd3f8e7092eba3803519ff47b6c6fdd005bb51a3ba561e723",
+      "matrix_file": "events-03-667524525cace4ebd3f8.npy",
+      "matrix_sha256": "4fad011c214a8ab7434b51ffbf29702dd1d4f9ace5edb8430c53b4f73467c705"
+    },
+    "04": {
+      "events": 3176,
+      "docs_sha256": "3de738604ec42785053aa97fd54ae18c316f1e1dec6fa2f69086b167368812fe",
+      "matrix_file": "events-04-3de738604ec42785053a.npy",
+      "matrix_sha256": "28357bd8271345324ce764bf994e6fc614d76d52dc51e6820a34adb66bd83814"
+    },
+    "05": {
+      "events": 3091,
+      "docs_sha256": "78fdf0f6da33137527ee0f5db4625ecc9b976b56710f3ced09e337fdf9ebb909",
+      "matrix_file": "events-05-78fdf0f6da33137527ee.npy",
+      "matrix_sha256": "b4168eeeefde54e497280cb0e17f09d4d2dad6f0336b8f8b4ca05c473011c1d1"
+    }
+  }
+}

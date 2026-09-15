@@ -1,0 +1,35 @@
+{
+  "groupmembench": {
+    "citation": "Yang et al., GroupMemBench, arXiv:2605.14498, Table 2 (accuracy, %) and Table 11 (ingestion cost USD and storage GB, per-domain averages)",
+    "setup": "memory ingestion with gpt-4o-mini, answering agent and judge GPT-5, dense retrieval text-embedding-3-large",
+    "question_counts": {"multi_hop": 182, "knowledge_update": 107, "temporal": 162, "user_implicit": 49, "term_ambiguity": 106, "abstention": 109},
+    "note": "Published averages are over 715 questions (abstention 109). The pinned repository revision used here has 139 abstention questions, so comparisons use the five shared categories (606 questions).",
+    "methods": {
+      "BM25": {"accuracy_pct": {"multi_hop": 40.11, "knowledge_update": 25.23, "term_ambiguity": 14.15, "user_implicit": 40.82, "temporal": 54.94, "abstention": 77.98}, "average_pct": 43.22, "ingestion_usd": null, "storage_gb": null},
+      "text-embedding-3-large": {"accuracy_pct": {"multi_hop": 36.26, "knowledge_update": 23.36, "term_ambiguity": 21.70, "user_implicit": 46.94, "temporal": 32.72, "abstention": 75.23}, "average_pct": 38.04, "ingestion_usd": null, "storage_gb": null},
+      "GraphRAG": {"accuracy_pct": {"multi_hop": 12.09, "knowledge_update": 14.02, "term_ambiguity": 19.81, "user_implicit": 14.29, "temporal": 5.56, "abstention": 66.97}, "average_pct": 20.56, "ingestion_usd": 12.51, "storage_gb": 3.00},
+      "Mem0": {"accuracy_pct": {"multi_hop": 21.98, "knowledge_update": 4.67, "term_ambiguity": 11.32, "user_implicit": 20.41, "temporal": 16.67, "abstention": 82.57}, "average_pct": 25.73, "ingestion_usd": 18.41, "storage_gb": 0.99},
+      "MemGPT": {"accuracy_pct": {"multi_hop": 22.53, "knowledge_update": 17.76, "term_ambiguity": 20.75, "user_implicit": 28.57, "temporal": 12.42, "abstention": 77.98}, "average_pct": 28.15, "ingestion_usd": 0.43, "storage_gb": 0.69},
+      "A-Mem": {"accuracy_pct": {"multi_hop": 35.16, "knowledge_update": 22.43, "term_ambiguity": 26.42, "user_implicit": 46.94, "temporal": 23.46, "abstention": 67.89}, "average_pct": 35.10, "ingestion_usd": 26.13, "storage_gb": 6.60},
+      "HippoRAG": {"accuracy_pct": {"multi_hop": 39.56, "knowledge_update": 27.10, "term_ambiguity": 30.19, "user_implicit": 42.86, "temporal": 29.63, "abstention": 75.23}, "average_pct": 39.72, "ingestion_usd": 8.64, "storage_gb": 5.76},
+      "Hindsight": {"accuracy_pct": {"multi_hop": 42.31, "knowledge_update": 17.76, "term_ambiguity": 37.74, "user_implicit": 40.82, "temporal": 54.94, "abstention": 77.06}, "average_pct": 46.01, "ingestion_usd": 32.10, "storage_gb": 4.25}
+    }
+  },
+  "evermembench": {
+    "citation": "Hu et al., Evaluating Long-Horizon Memory for Multi-Party Collaborative Dialogues (EverMemBench), KDD 2026, arXiv:2602.01313, Table 4, GPT-4.1-mini answer-model rows",
+    "average": "unweighted mean of the nine task accuracies",
+    "task_to_minor": {"Single": "SH", "Multi": "MH", "Temp": "TP", "Const": "C", "Proact": "P", "Update": "U", "Style": "Style", "Skill": "Skill", "Role": "Title"},
+    "methods": {
+      "Full Context": {"Single": 83.57, "Multi": 2.41, "Temp": 7.00, "Const": 63.43, "Proact": 25.06, "Update": 42.54, "Style": 39.20, "Skill": 35.50, "Role": 38.27, "Average": 37.44},
+      "MemoBase": {"Single": 60.09, "Multi": 12.85, "Temp": 18.00, "Const": 64.68, "Proact": 36.77, "Update": 30.60, "Style": 17.05, "Skill": 29.59, "Role": 38.78, "Average": 34.27},
+      "Mem0": {"Single": 55.40, "Multi": 11.24, "Temp": 6.33, "Const": 66.17, "Proact": 52.46, "Update": 51.87, "Style": 22.73, "Skill": 31.36, "Role": 36.22, "Average": 37.09},
+      "Zep": {"Single": 73.71, "Multi": 8.03, "Temp": 13.00, "Const": 67.16, "Proact": 47.54, "Update": 43.66, "Style": 26.70, "Skill": 35.50, "Role": 44.39, "Average": 39.97},
+      "MemOS": {"Single": 71.36, "Multi": 18.88, "Temp": 15.67, "Const": 69.90, "Proact": 51.99, "Update": 45.15, "Style": 28.98, "Skill": 32.54, "Role": 48.47, "Average": 42.55}
+    }
+  },
+  "socialmembench": {
+    "citation": "SocialMemBench: Are AI Memory Systems Ready for Social Group Settings?, arXiv:2605.17789, Table 4 (question-weighted MeanQ)",
+    "setup": "GPT-4o-mini answerer and judge; raw retrieval text-embedding-3-small cosine top-10",
+    "meanq": {"full-context GPT-4o-mini": 0.369, "uncompressed raw retrieval": 0.345, "subject-mem": 0.321, "SMG": 0.213, "Graphiti": 0.178, "LangMem": 0.162, "Mem0": 0.143, "Cognee": 0.120}
+  }
+}

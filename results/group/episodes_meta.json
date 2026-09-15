@@ -1,0 +1,54 @@
+{
+  "schema_version": "paper_external_temporal_episodes_v1",
+  "memory_schema_version": "temporal_episode_v2",
+  "extraction_and_attach_model": "gpt-4o-mini-2024-07-18",
+  "network_count": 4,
+  "session_count": 3153,
+  "turn_count": 120000,
+  "episode_count": 10801,
+  "stats": {
+    "networks": 4,
+    "sessions_processed": 3153,
+    "events_total": 21407,
+    "events_rejected": 6822,
+    "rejected_reasons": {
+      "no_valid_evidence_quote": 6711,
+      "invalid_event_type": 89,
+      "exceeds_max_events_per_turn": 22
+    },
+    "episodes_total": 10801,
+    "extraction_calls": 0,
+    "attach_calls": 386,
+    "total_new_calls": 386,
+    "evidence_attempted": 28159,
+    "evidence_valid": 21438,
+    "clusters_by_network": {
+      "Finance": 786,
+      "Healthcare": 792,
+      "Manufacturing": 785,
+      "Technology": 790
+    }
+  },
+  "episodes_sha256": "100f13d9cd0055935f56250af2afdb6343f2b93324d8c71e7a3f03fdeaa9a064",
+  "qa_read": false,
+  "source_manifest": {
+    "benchmark": "GroupMemBench",
+    "official_url": "https://github.com/UCSB-NLP-Chang/GroupMemBench.git",
+    "official_commit": "e2682e01ff490acfe4fac2940159dce60307dfc9",
+    "files": {
+      "prompts/hipporag_agent_system.txt": "c2019778844ba90e854d80bf25a9a0a316c50538acb9c12ce6dd070b7013865d",
+      "prompts/hipporag_judge_system.txt": "abcd96fd2df5eff8d4d32d516da7d84847478a03928d39456f54770657966fc1",
+      "data/final/Finance/synthetic_domain_channels_rolevariants_Finance.json": "0dab291e46fc1c32a1c454b80d931bd75fa180bfa063280015d050c09325c0e8",
+      "data/final/Technology/synthetic_domain_channels_rolevariants_Technology.json": "b2b5b816475a11c11c3ff80bfcfcb157c9ed5f793cd92f0a76d90253d22f9c5d",
+      "data/final/Healthcare/synthetic_domain_channels_rolevariants_Healthcare.json": "bc665c792847bab5c5e8e35e4d5ce0489e0b1b8217d15dc8261d5f878155a7cf",
+      "data/final/Manufacturing/synthetic_domain_channels_rolevariants_Manufacturing.json": "cfe2badca60e19f6d75c6d027402d32c0983dc25f06c9aa5fe5b6bf148ffa3c9"
+    },
+    "implementation": {
+      "groupmembench_episode_run.py": "3ef6ddbbc99524c0ad4ffff236613dae4dd95511765b366c8807b2b5134fce8e",
+      "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97",
+      "query_independent_episode_pipeline.py": "2fd9d106b69cfadf990285796db718c1f83afe23137577f54d518a0762ea50f5",
+      "temporal_episode_prototype.py": "eabdba46f397d0c807f95245f3b9c90006cd485643fa69f8fee37cf03a8d2dc0",
+      "PAPER_BENCHMARK_PROTOCOL.md": "4845c4e504c95229028babb7626c52cfab57954a5d51c4a2857673a03143c870"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "socialmembench_temporal_episodes_full_v1",
+  "model": "gpt-4o-mini-2024-07-18",
+  "temperature": 0,
+  "retrieval": "hybrid raw + dense episodes + unified dense rerank",
+  "raw_first_stage_k": 12,
+  "episode_first_stage_k": 12,
+  "context_word_budget": 400,
+  "conditions": [
+    "RAW",
+    "RAW+EPISODES"
+  ],
+  "prediction_count": 1031,
+  "predictions_sha256": "d404b268054985239e6409cbe1992deb1727d00bbf11fd7ba311073aa5edb767",
+  "gold_read": false
+}

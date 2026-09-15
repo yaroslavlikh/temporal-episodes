@@ -1,0 +1,18 @@
+{
+  "benchmark": "EverMemBench-Dynamic",
+  "protocol_sha256": "ab900c52bb49c63817de12649e1241089a9d63892e9a171723bd955b75bbf405",
+  "runner_sha256": "df0b02827fedd40487bef66eaa659fc81f81a5659f3717ad5e799c756df0746b",
+  "conditions": [
+    "RAW+EVENTS",
+    "RAW+EVENTS-token-matched"
+  ],
+  "judge_model": "google/gemini-3-flash-preview",
+  "judge_call": "official_evaluator_no_max_tokens_v1",
+  "predictions_sha256": "0770e33553199012b7fc26bbe49eb4eb1c9be3b74af8e7de28b532459c2deb6f",
+  "row_count": 600,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "1d383fbff4fceffad8f2f72f4b09a2a6d0b5d61f4df53f7419eb2dec65fa4f4c"
+}

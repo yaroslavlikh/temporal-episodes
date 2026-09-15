@@ -1,0 +1,30 @@
+{
+  "benchmark": "EverMemBench-Dynamic",
+  "code_url": "https://github.com/EverMind-AI/EverMemBench.git",
+  "code_commit": "e10b3d52f0e4cfc5c124ad406b5d95c59c73738b",
+  "data_url": "https://huggingface.co/datasets/EverMind-AI/EverMemBench-Dynamic",
+  "data_commit": "a6b210a32248e841967b7b64a64281d2ff3f669d",
+  "files": {
+    "code/eval/config/pipeline.yaml": "2e43e3769852e93af43afbbb6a23009084b52af788937b426489426744d81355",
+    "code/eval/config/prompts.yaml": "b1259f6ebb93ba5c56b558414a0f0fa04f36cee7801a9cdd009f2e9706011542",
+    "data/01/dialogue.json": "16e4fc66c47eb742cc75097ab5ea6d95e1fae8963841391e58a8e4ec35ace2dc",
+    "data/02/dialogue.json": "37008035d1f7804a12079e4475f612a2b194b3c1c321c7a674e50d8ee57f4e0f",
+    "data/03/dialogue.json": "eeb18a989e6b4f59ae23d91fcc69d8ddbee8c917793c81ae623ecee9388dc8b5",
+    "data/04/dialogue.json": "3870ce44dfef56cebdc0236c19825eb0c5ea84e028b466e9f9fdb59349cbd56c",
+    "data/05/dialogue.json": "0434cd414d01ed4fb22e37c016ee647c3d0ea5e94fe1edf7d72dcf4ae42158e8"
+  },
+  "implementation": {
+    "evermembench_episode_run.py": "2839109d6e06409e58f201f55541d4b4b95ec0ffd31ce89446c76008c08010ef",
+    "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97",
+    "query_independent_episode_pipeline.py": "2fd9d106b69cfadf990285796db718c1f83afe23137577f54d518a0762ea50f5",
+    "temporal_episode_prototype.py": "eabdba46f397d0c807f95245f3b9c90006cd485643fa69f8fee37cf03a8d2dc0",
+    "PAPER_BENCHMARK_PROTOCOL.md": "4845c4e504c95229028babb7626c52cfab57954a5d51c4a2857673a03143c870"
+  },
+  "question_files": {
+    "01/qa_01.json": "358e22d138e24c5e655fc2c09e7f63e22e25603a065d65c946ab30ed57884d3c",
+    "02/qa_02.json": "46ac2dbe2e88b0752f9777feae4c430b033137dd84f1fe1bd749338dc4b1b446",
+    "03/qa_03.json": "81b35a8349bdbfb0f5232dfb00a48779170f3eaa2b499ad5b09de5704c19d9e7",
+    "04/qa_04.json": "47579156659cdedab6419d5ffa2f3030ca2a917bd3c3f134eaf16db318769797",
+    "05/qa_05.json": "2e5038135dcc6f8ae98b3bcbf956f0d03f9086335436c84504552a2124910d2b"
+  }
+}

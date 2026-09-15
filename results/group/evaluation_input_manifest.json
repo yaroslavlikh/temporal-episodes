@@ -1,0 +1,46 @@
+{
+  "benchmark": "GroupMemBench",
+  "official_url": "https://github.com/UCSB-NLP-Chang/GroupMemBench.git",
+  "official_commit": "e2682e01ff490acfe4fac2940159dce60307dfc9",
+  "files": {
+    "prompts/hipporag_agent_system.txt": "c2019778844ba90e854d80bf25a9a0a316c50538acb9c12ce6dd070b7013865d",
+    "prompts/hipporag_judge_system.txt": "abcd96fd2df5eff8d4d32d516da7d84847478a03928d39456f54770657966fc1",
+    "data/final/Finance/synthetic_domain_channels_rolevariants_Finance.json": "0dab291e46fc1c32a1c454b80d931bd75fa180bfa063280015d050c09325c0e8",
+    "data/final/Technology/synthetic_domain_channels_rolevariants_Technology.json": "b2b5b816475a11c11c3ff80bfcfcb157c9ed5f793cd92f0a76d90253d22f9c5d",
+    "data/final/Healthcare/synthetic_domain_channels_rolevariants_Healthcare.json": "bc665c792847bab5c5e8e35e4d5ce0489e0b1b8217d15dc8261d5f878155a7cf",
+    "data/final/Manufacturing/synthetic_domain_channels_rolevariants_Manufacturing.json": "cfe2badca60e19f6d75c6d027402d32c0983dc25f06c9aa5fe5b6bf148ffa3c9"
+  },
+  "implementation": {
+    "groupmembench_episode_run.py": "3ef6ddbbc99524c0ad4ffff236613dae4dd95511765b366c8807b2b5134fce8e",
+    "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97",
+    "query_independent_episode_pipeline.py": "2fd9d106b69cfadf990285796db718c1f83afe23137577f54d518a0762ea50f5",
+    "temporal_episode_prototype.py": "eabdba46f397d0c807f95245f3b9c90006cd485643fa69f8fee37cf03a8d2dc0",
+    "PAPER_BENCHMARK_PROTOCOL.md": "4845c4e504c95229028babb7626c52cfab57954a5d51c4a2857673a03143c870"
+  },
+  "question_files": {
+    "questions/Finance/multi_hop.jsonl": "12f689fae2e33f829715c4281208e585b6d06752f1a5e7cb6dd1025c036c0a09",
+    "questions/Finance/knowledge_update.jsonl": "af991804babdeecc0827ec64037355b425699331406a6daf8019ebe27b9f0561",
+    "questions/Finance/temporal.jsonl": "1d6384a444b9402d432b926c089ba10a623b28cbc94414c4e43090b2bd0e3866",
+    "questions/Finance/user_implicit.jsonl": "1720cd5ea652fd83a8b51e2b2ea53a603ceb6652812288f02fc1fecfd3b3d42f",
+    "questions/Finance/term_ambiguity.jsonl": "e8993f6495e8d32e775c748af477e67054b3bebf442bbba3f73865b18451e688",
+    "questions/Finance/abstention.jsonl": "e8af614e52f6962c87961182a695f7e56899df316f07f2678649d2a21954c268",
+    "questions/Technology/multi_hop.jsonl": "8b0491e08be326a5496c9c9930cf6e310bf01a97b1b0435f6258f20970a1b121",
+    "questions/Technology/knowledge_update.jsonl": "759ea371f5136761ea1c6518015029e77c70520be646af1c2b2caa5608d3105e",
+    "questions/Technology/temporal.jsonl": "d957a53dbae86f8b8eefd397b0fa69352da9885b50c51bd68e23d6622dbd55b5",
+    "questions/Technology/user_implicit.jsonl": "62f274b99a5c7203a6a54bfee824c4c97bb3458b8f201f9888ddca233d8d33d7",
+    "questions/Technology/term_ambiguity.jsonl": "ca79a800fb9bc32c95cb1b2fa135495cfd6048815b38f90e58d46c9b75a559a9",
+    "questions/Technology/abstention.jsonl": "d3703d6c42d0a9803d3725b2f337c3bfd10ff51952d35abd0c40da713abb6fad",
+    "questions/Healthcare/multi_hop.jsonl": "2d26f763ee5fff6a168f47c8f9b1447f44c4296e8f725e57ac917576aa1d1e0f",
+    "questions/Healthcare/knowledge_update.jsonl": "0e520375ed9c38f74b05d2e1448bf1e280e330dc3be54e6d2f5481da745bb141",
+    "questions/Healthcare/temporal.jsonl": "b9939a1094c60f0ab637ef8d2b8b27840ce4ad5b996f01b86aaeb9cffafe8549",
+    "questions/Healthcare/user_implicit.jsonl": "baaa29b89afb87dd685b6f275651262be732d09bb88c610866e18d4c7e1cc35a",
+    "questions/Healthcare/term_ambiguity.jsonl": "a2383a68b45372ea70c39987ccfa00adce294c1fdaf352bff6c509e044d5b4bd",
+    "questions/Healthcare/abstention.jsonl": "11a47a0a7a1a1f20352ef1f9ba296093361206e661ee0d862d552fa8be51f0cc",
+    "questions/Manufacturing/multi_hop.jsonl": "8219f7e8826ad6725fb0e40189b0b2b7c1c545d7a88fa4f8ce1f4e46c6577282",
+    "questions/Manufacturing/knowledge_update.jsonl": "4417f400aacefddb9e541e7e7cd999740d67a56dbac5f10a405ed01588a2553d",
+    "questions/Manufacturing/temporal.jsonl": "dcb534a68df66baee63aa4195c9b7101ccbb12ee6c00773e0d6aa8e8a96918fd",
+    "questions/Manufacturing/user_implicit.jsonl": "15936b79a89357065f1cddefd48cf70c328d1329209f23b851141ed8c7dd68f7",
+    "questions/Manufacturing/term_ambiguity.jsonl": "2066d2408c16f5a5ad1054317b89787a29444aef80daa4c7105fddcbdc99a5ab",
+    "questions/Manufacturing/abstention.jsonl": "0953d0b3ef3cdbcae9e96224e9df2428ca041948406f9a6aa9af34ac36b527aa"
+  }
+}

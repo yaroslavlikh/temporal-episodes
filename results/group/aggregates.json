@@ -1,0 +1,154 @@
+{
+  "source": "Computed from the withheld per-question files listed in withheld_sha256.json with the reproduction statistics functions (paired bootstrap 20,000 samples, seed 20260912; exact McNemar).",
+  "primary_endpoint": {
+    "n": 150,
+    "RAW": 0.34,
+    "RAW+EPISODES": 0.3,
+    "delta": -0.04,
+    "ci95": [
+      -0.093333,
+      0.013333
+    ],
+    "episodes_only_correct": 6,
+    "raw_only_correct": 12,
+    "mcnemar_p": 0.237885
+  },
+  "primary_endpoint_excluding_empty_answers": {
+    "n": 124,
+    "RAW": 0.370968,
+    "RAW+EPISODES": 0.346774,
+    "delta": -0.024194,
+    "ci95": [
+      -0.080645,
+      0.024194
+    ],
+    "episodes_only_correct": 4,
+    "raw_only_correct": 7,
+    "mcnemar_p": 0.548828
+  },
+  "all_questions": {
+    "n": 745,
+    "RAW": 0.420134,
+    "RAW+EPISODES": 0.402685,
+    "delta": -0.01745,
+    "ci95": [
+      -0.042953,
+      0.006711
+    ],
+    "episodes_only_correct": 39,
+    "raw_only_correct": 52,
+    "mcnemar_p": 0.208174
+  },
+  "all_questions_excluding_empty_answers": {
+    "n": 657,
+    "RAW": 0.459665,
+    "RAW+EPISODES": 0.449011,
+    "delta": -0.010654,
+    "ci95": [
+      -0.03653,
+      0.015221
+    ],
+    "episodes_only_correct": 34,
+    "raw_only_correct": 41,
+    "mcnemar_p": 0.488683
+  },
+  "by_category": {
+    "multi_hop": {
+      "n": 182,
+      "RAW_correct": 68,
+      "RAW+EPISODES_correct": 62
+    },
+    "knowledge_update": {
+      "n": 107,
+      "RAW_correct": 29,
+      "RAW+EPISODES_correct": 24
+    },
+    "temporal": {
+      "n": 162,
+      "RAW_correct": 54,
+      "RAW+EPISODES_correct": 52
+    },
+    "user_implicit": {
+      "n": 49,
+      "RAW_correct": 24,
+      "RAW+EPISODES_correct": 24
+    },
+    "term_ambiguity": {
+      "n": 106,
+      "RAW_correct": 27,
+      "RAW+EPISODES_correct": 25
+    },
+    "abstention": {
+      "n": 139,
+      "RAW_correct": 111,
+      "RAW+EPISODES_correct": 113
+    }
+  },
+  "shared_five_categories": {
+    "categories": [
+      "multi_hop",
+      "knowledge_update",
+      "temporal",
+      "user_implicit",
+      "term_ambiguity"
+    ],
+    "n": 606,
+    "RAW_correct": 202,
+    "RAW+EPISODES_correct": 187
+  },
+  "empty_answers": {
+    "RAW": 44,
+    "RAW+EPISODES": 58
+  },
+  "answer_input_tokens_mean": {
+    "RAW": 1468.4,
+    "RAW+EPISODES": 2781.4
+  },
+  "api_cost_usd_list_prices": {
+    "total": 32.6347,
+    "by_model": {
+      "gpt-4o-mini-2024-07-18": 6.6963,
+      "text-embedding-3-large": 1.003,
+      "gpt-5": 24.9354
+    }
+  },
+  "memory": {
+    "messages": 120000,
+    "chunks": 3153,
+    "events": 21407,
+    "episodes": 10801
+  },
+  "per_domain_estimates": {
+    "Finance": {
+      "ingestion_usd_raw": 0.3548,
+      "ingestion_usd_episodes": 2.2067,
+      "storage_gb_raw": 0.3686,
+      "storage_gb_episodes": 0.4043
+    },
+    "Technology": {
+      "ingestion_usd_raw": 0.35,
+      "ingestion_usd_episodes": 2.0824,
+      "storage_gb_raw": 0.3686,
+      "storage_gb_episodes": 0.4059
+    },
+    "Healthcare": {
+      "ingestion_usd_raw": 0.1051,
+      "ingestion_usd_episodes": 1.7396,
+      "storage_gb_raw": 0.3686,
+      "storage_gb_episodes": 0.4079
+    },
+    "Manufacturing": {
+      "ingestion_usd_raw": 0.1107,
+      "ingestion_usd_episodes": 1.6682,
+      "storage_gb_raw": 0.3686,
+      "storage_gb_episodes": 0.4041
+    }
+  },
+  "per_domain_average": {
+    "ingestion_usd_raw": 0.2301,
+    "ingestion_usd_episodes": 1.9242,
+    "storage_gb_raw": 0.3686,
+    "storage_gb_episodes": 0.4055
+  },
+  "per_domain_note": "Ingestion cost apportioned by LLM calls (chunks + events) and embedded characters; storage = float32 index files plus episodes.jsonl."
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "temporal_episodes_official_harness_v1",
+  "condition": "RAW+EPISODES",
+  "model": "gpt-4o-mini-2024-07-18",
+  "temperature": 0,
+  "embedding_model": "text-embedding-3-small",
+  "top_k": 10,
+  "answer_prompt": "research.socialmembench_full_run.answer_prompt",
+  "episodes_sha256": "7d5b9a4e5cce14fbd26301ee95357c938f9eb518f7c39b96361fa0386fea3cb1",
+  "predictions_sha256": "d809b42e73b90a32093588a14873b5de7a1e9f716a4a9b16cee02b4637a6958a",
+  "gold_read": false
+}

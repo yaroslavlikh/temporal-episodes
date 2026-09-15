@@ -1,0 +1,28 @@
+[project]
+name = "temporal-episodes"
+version = "0.1.0"
+description = "Reproduction package: provenance-backed temporal episode memory evaluated on SocialMemBench, GroupMemBench and EverMemBench"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "numpy>=2.3",
+    "pandas>=2.3",
+    "pyarrow>=22",
+    "PyYAML>=6.0",
+    "matplotlib>=3.10",
+]
+
+[project.optional-dependencies]
+# Re-running benchmarks (API calls, token counting, local MiniLM embeddings for episode linking)
+rerun = [
+    "openai>=2.14",
+    "python-dotenv>=1.1",
+    "httpx>=0.28",
+    "tiktoken>=0.12",
+    "sentence-transformers>=6.0",
+    "torch>=2.9",
+]
+
+[tool.setuptools]
+packages = []

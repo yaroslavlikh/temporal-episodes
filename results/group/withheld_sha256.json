@@ -1,0 +1,21 @@
+{
+  "reason": "GroupMemBench publishes no license; per-question predictions, judgments, episodes and quotes are not redistributed.",
+  "files": {
+    "predictions.jsonl": {
+      "sha256": "b72076901af52133aa74b74857784853a89fd7dbe7d6d9de1a66b46dbdec3517",
+      "rows": 1490
+    },
+    "results.jsonl": {
+      "sha256": "3ef95245e6e946f5a0bb1e19cebc17aef32f8b1c6ed92433635f071b2171863b",
+      "rows": 1490
+    },
+    "episodes.jsonl": {
+      "sha256": "100f13d9cd0055935f56250af2afdb6343f2b93324d8c71e7a3f03fdeaa9a064",
+      "rows": 10801
+    },
+    "attach_decisions.jsonl": {
+      "sha256": "3a5ce3bc0da6cddf09a09707600816c451658dbdac78c6426ad196878f1aad89",
+      "rows": 21407
+    }
+  }
+}

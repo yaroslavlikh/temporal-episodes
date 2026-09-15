@@ -1,0 +1,21 @@
+{
+  "benchmark": "GroupMemBench",
+  "official_commit": "e2682e01ff490acfe4fac2940159dce60307dfc9",
+  "conditions": [
+    "RAW",
+    "RAW+EPISODES"
+  ],
+  "answer_model": "gpt-5",
+  "embedding_model": "text-embedding-3-large",
+  "top_k": 10,
+  "episode_snapshot_sha256": "100f13d9cd0055935f56250af2afdb6343f2b93324d8c71e7a3f03fdeaa9a064",
+  "execution_runner": "groupmembench_parallel_resume.py",
+  "execution_runner_sha256": "38b4961006c3c1b9613effa7a52733094b8f8bdcfcb5f76d9cd95907fff5fd5c",
+  "workers": 16,
+  "row_count": 1490,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "b72076901af52133aa74b74857784853a89fd7dbe7d6d9de1a66b46dbdec3517"
+}

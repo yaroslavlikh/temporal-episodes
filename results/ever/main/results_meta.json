@@ -1,0 +1,46 @@
+{
+  "benchmark": "EverMemBench-Dynamic",
+  "code_commit": "e10b3d52f0e4cfc5c124ad406b5d95c59c73738b",
+  "data_commit": "a6b210a32248e841967b7b64a64281d2ff3f669d",
+  "conditions": [
+    "RAW",
+    "RAW+EPISODES"
+  ],
+  "judge_model": "google/gemini-3-flash-preview",
+  "judge_call": "official_evaluator_no_max_tokens_v1",
+  "judge_health": {
+    "RAW": {
+      "open_ended_judged": 762,
+      "parse": {
+        "json": 762
+      },
+      "finish_reason": {
+        "stop": 742,
+        "cached": 20
+      },
+      "re_requested": 0
+    },
+    "RAW+EPISODES": {
+      "open_ended_judged": 762,
+      "parse": {
+        "json": 762
+      },
+      "finish_reason": {
+        "stop": 745,
+        "cached": 17
+      },
+      "re_requested": 0
+    }
+  },
+  "predictions_sha256": "2d25c1fd0b884ee40c6605c8bafbef226ea72357b0c62e70b20cfc2fb2c9f8ba",
+  "evaluation_input_manifest_sha256": "14eecaa286d572ed958bd9d39422fc7b934e1448cca82c743685e3fd3d6dd4cf",
+  "execution_runner": "evermembench_parallel_resume.py",
+  "execution_runner_sha256": "fc438611c63586f1267bf748d6ce3ed7a1cf65bea1ec0956aa01493268415d76",
+  "workers": 16,
+  "row_count": 4800,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "fb9646a610a5eba5292205e4b419ad755171b6336327aceeff7eb20ca92ad583"
+}

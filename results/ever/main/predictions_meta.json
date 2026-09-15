@@ -1,0 +1,35 @@
+{
+  "benchmark": "EverMemBench-Dynamic",
+  "code_commit": "e10b3d52f0e4cfc5c124ad406b5d95c59c73738b",
+  "data_commit": "a6b210a32248e841967b7b64a64281d2ff3f669d",
+  "conditions": [
+    "RAW",
+    "RAW+EPISODES"
+  ],
+  "answer_model": "openai/gpt-4.1-mini",
+  "embedding_model": "text-embedding-3-large",
+  "top_k": 10,
+  "episode_snapshot_sha256": "2068fa9ca1a2e4507f855fbbccac5afd5c200ba22f0b871d328acd4622c2114d",
+  "answer_postprocessing": "official answerer.py (_parse_mc_answer / [EMPTY] marker)",
+  "answer_failure_markers": {
+    "RAW": {
+      "[EMPTY]": 0,
+      "[INVALID]": 0,
+      "[FAILED]": 0
+    },
+    "RAW+EPISODES": {
+      "[EMPTY]": 0,
+      "[INVALID]": 0,
+      "[FAILED]": 0
+    }
+  },
+  "execution_runner": "evermembench_parallel_resume.py",
+  "execution_runner_sha256": "fc438611c63586f1267bf748d6ce3ed7a1cf65bea1ec0956aa01493268415d76",
+  "workers": 16,
+  "row_count": 4800,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "2d25c1fd0b884ee40c6605c8bafbef226ea72357b0c62e70b20cfc2fb2c9f8ba"
+}

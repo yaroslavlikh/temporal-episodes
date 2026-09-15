@@ -1,0 +1,17 @@
+{
+  "schema_version": "full_official_v1",
+  "model": "gpt-4o-mini-2024-07-18",
+  "network_count": 43,
+  "session_count": 348,
+  "flat_count": 1157,
+  "versioned_count": 1148,
+  "build_stats": {
+    "validated_assertion_count": 1157,
+    "rejected_flat": 0,
+    "rejected_versioned": 0
+  },
+  "snapshot_sha256": "a54b6a09ade9056331f1a441de6116d872821221dc20573bb8d2a4ce35024b32",
+  "extraction_prompt_sha256": "047104d7b194e416bd873024750bd1da8a8f1328def4b7e700639ffd3d85fc0c",
+  "slot_prompt_sha256": "388b62e7c2589ce9658bac623707a43a91b887f6e54e629b4b2d78249fd66250",
+  "qa_read": false
+}
