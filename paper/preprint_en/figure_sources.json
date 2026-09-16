@@ -1,0 +1,11 @@
+{
+  ".research_runs/frozen/final_sprint_A_events_full_v1_20260915_233142_MSK/run/summary.json": "506946520841ff30f5138672cdc13b6dbcb9b40e7816880e9f336e702d06f6a8",
+  ".research_runs/frozen/final_sprint_B2_episodes_chrono_v1_20260915_232910_MSK/run/summary.json": "54efb99acf384864cd7000c9ee00630b44f1b4c628095dbd716a75f55f5af8c7",
+  ".research_runs/frozen/final_sprint_C_hyde_raw_v1_20260916_024144_MSK/run/summary.json": "cd8bc23334a75602a85d39af8c424306761a0120a54714d02d04ef033dd46891",
+  ".research_runs/frozen/final_sprint_C2_hyde_token_matched_v1_20260916_024306_MSK/run/summary.json": "96bf8315f842f25644eed756147252efca30b738b6ed4bbb109beae14a10837e",
+  ".research_runs/evermembench_temporal_episodes_official_v1/report.md": "f9a2eb163a14c7e826a7d4c43561e769025abca7a9e0179e462a5546181e9fa7",
+  ".research_runs/groupmembench_temporal_episodes_official_v1/report.md": "ed95a4d12b660daf9459c896c73ff327844e751c915aecddd1de4058dd23a7ba",
+  ".research_runs/final_sprint_D_groupmembench_repair_v2/report.md": "4e4f5f42587bc7609d3d7ad825b53ee9983759a23facfaad17ec84b5f9b76e16",
+  ".research_runs/final_sprint_D_groupmembench_repair_v2/results_v2_meta.json": "2a83759cec8aa0b72bd5df5f62bf727dd92350443a701649514d5ef135e4d5e5",
+  ".research_runs/socialmembench_temporal_episodes_official_harness_v1/report.md": "766a33251d18c5a8b08b3848b38993d498fe0d09fa81200ce5c9b1b275a1b2c4"
+}

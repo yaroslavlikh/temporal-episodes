@@ -1,0 +1,1158 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Menlo}[Scale=.78]
+\usepackage[english]{babel}
+\usepackage[margin=22mm,headheight=14pt]{geometry}
+\usepackage{amsmath,booktabs,array,tabularx,graphicx}
+\usepackage{microtype,xcolor,hyperref,natbib,enumitem,caption,fancyhdr,placeins}
+
+\definecolor{ink}{HTML}{182636}
+\definecolor{blue}{HTML}{315A87}
+\definecolor{green}{HTML}{16806A}
+\definecolor{pale}{HTML}{EDF3F8}
+\definecolor{mint}{HTML}{EAF5F1}
+\definecolor{warm}{HTML}{F7F2E9}
+\definecolor{gray}{HTML}{758190}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\captionsetup{font=small,labelfont={bf,color=ink},skip=5pt}
+\setlist{nosep,leftmargin=*}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{1.25em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray} Evidence delivery and answer quality}
+\fancyfoot[C]{\color{gray}\thepage}
+\renewcommand{\headrulewidth}{.25pt}
+
+\newcommand{\raw}{\textsc{Raw}}
+\newcommand{\events}{\textsc{Events}}
+\newcommand{\episodes}{\textsc{Episodes}}
+\newcommand{\pp}{\,\text{pp}}
+\newcommand{\method}{\textsc{Elem}}
+\newcommand{\resultbox}[1]{%
+  \begin{center}\setlength{\fboxsep}{9pt}%
+  \colorbox{mint}{\parbox{.93\linewidth}{#1}}\end{center}}
+\newcommand{\warningbox}[1]{%
+  \begin{center}\setlength{\fboxsep}{9pt}%
+  \colorbox{warm}{\parbox{.93\linewidth}{#1}}\end{center}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+{\sffamily\bfseries\fontsize{15.5}{19.22}\selectfont
+The gap between evidence delivery and answer quality\par}
+\vspace{3.4mm}
+{\sffamily\color{gray}\fontsize{11}{14}\selectfont
+Event memory with addressable sources in long multi-party dialogues\par}
+\vspace{5mm}
+{\color{gray}\rule{.16\linewidth}{.4pt}}
+\vspace{4mm}
+
+{\sffamily\fontsize{10.8}{13}\selectfont Iaroslav Likhachev\par}
+\vspace{1.2mm}
+{\sffamily\color{gray}\fontsize{9.4}{12}\selectfont Independent researcher\par}
+\vspace{1.2mm}
+{\sffamily\color{gray}\fontsize{9}{11}\selectfont 16 September 2026\par}
+\end{center}
+\vspace{-3mm}
+
+\begin{abstract}
+In long multi-party conversations, useful knowledge rarely coincides with a
+single self-contained message: states change, decisions get refined, and a late
+question is phrased differently from the original discussion. Raw messages
+preserve evidentiality but close this semantic gap poorly; free-form summaries
+improve access but can lose the author, the time and the per-fact link to the
+source. We study \emph{event memory with addressable sources} (\method): every
+derived event has its own text for retrieval and immutable pointers to the
+originating messages, carrying author, timestamp and a verbatim quote. Events
+are built before any question is read, compete with raw messages in a single
+ranking, and after retrieval expand back into primary evidence.
+
+\textbf{What is confirmed.} The event layer reliably improves \emph{evidence
+delivery}. Across all 2,400 EverMemBench questions, the precision of delivered
+gold sources rises by $+3.21\pp$ (95\% CI $[+2.84;+3.59]$, $p<10^{-59}$) while
+recall rises simultaneously by $+0.64\pp$ ($[+0.48;+0.80]$). This is not a
+trade-off: events deliver \emph{fewer} sources than raw retrieval (9.47 versus
+10.00, never more), and still find \emph{more} gold ones ($+0.117$ per question,
+$[+0.083;+0.151]$). The direction is positive in all nine official categories.
+The effect replicates on SocialMemBench ($+0.90\pp$ precision for flat memory,
+$p<10^{-31}$) and dominates query-side expansion: at statistically
+indistinguishable recall, events deliver $+6.68\pp$ ($[+5.06;+8.27]$) denser
+evidence than matched HyDE.
+
+\textbf{What is not confirmed.} None of these gains converts into answer
+quality. Across 2,400 questions micro accuracy moves by $+0.38\pp$
+(CI $[-0.8;+1.6]$). A registered confirmatory check on the 2,100 questions
+outside the discovery slice does not support the link: where events deliver
+strictly better evidence ($n=650$), the accuracy gain is $+0.77\pp$
+($p=.649$). The only nominally significant accuracy gain sits on a post hoc
+selected Temporal Duration slice and does not survive a Holm correction over
+nine categories; the endpoint whose slice and analysis were both fixed in
+advance (Group primary, $n=150$) is negative.
+
+\textbf{Contribution.} We report a \emph{dissociation}: in multi-party
+conversational memory with a strong dense raw baseline, a derived representation
+measurably improves what reaches the generator, and this is not the binding
+constraint on answer quality. Both halves of the claim are measured on the same
+sealed runs, and the evidence endpoint is deterministic (0 discrepancies out of
+300 under a stochastic rerun) whereas accuracy flips on 4\% of questions. The
+practical conclusion: addressable evidence is almost free (\$1.92 per domain of
+ingestion against \$32.10 for Hindsight, 0.41 GB, $+2$ ms), but one should not
+expect an accuracy gain from it on current benchmarks.
+\end{abstract}
+
+\section{Introduction}
+
+Conversational memory faces a conflict between two goals. Retrieval is best
+served by a self-contained description: ``Alexey cancelled his attendance
+because he is leaving.'' Verification needs the original material: who exactly
+wrote this, when, and in what words. If the history is replaced by summaries the
+answer becomes more accessible, but the boundary between evidence and
+interpretation disappears. If only messages are kept, the proof survives, but a
+late question has to guess anew all the elliptical, scattered and revised
+messages.
+
+The problem is especially visible in a group. The author of a message, the owner
+of an opinion and the subject of a statement can be three different people.
+Several topics run at once, and positional proximity in the stream does not mean
+membership in the same line of conversation. Finally, states evolve: ``I will be
+at the meeting'' becomes ``I have left town'' a week later. A flat profile will
+easily either keep both versions as current, or erase the first one and deprive
+the system of any way to explain the change.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{figures/concept.pdf}
+\caption{Two-view memory: a normalized event serves as the semantic bridge,
+while the answer is built from the returned primary messages. The example is
+illustrative and is not part of any benchmark.}
+\label{fig:concept}
+\end{figure}
+
+We propose to treat derived memory not as a new source of truth but as an
+\emph{index over evidence}. In our implementation, \method{}, an event contains
+(i) text optimized for semantic retrieval; (ii) a type, a viewpoint owner, a
+subject and an observed time; (iii) an immutable set of source IDs and literal
+quotes. Events compete with raw turns in a single vector top-$k$, and the
+selected derived documents expand back into messages. Episodes are an optional
+layer: they link revision, reaffirmation and augmentation, but do not replace
+events or their sources.
+
+This work answers three questions:
+\begin{enumerate}
+\item is the full system competitive against published memory systems within a
+consistent evaluation harness;
+\item does the event representation produce an effect beyond a larger context
+volume, message order and strong raw retrieval;
+\item does the effect transfer across different kinds of multi-party memory
+tasks, and does episode linking justify its additional complexity.
+\end{enumerate}
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item A two-view memory unit in which the retrieval abstraction is separated
+from immutable raw evidence, and author and time are preserved all the way to
+the answer.
+\item Query-independent construction and unified retrieval over heterogeneous
+memory units with deterministic provenance expansion.
+\item A full evaluation on EverMemBench, SocialMemBench and GroupMemBench with
+recorded cost, size, latency and frozen artifacts.
+\item A mechanistic set of controls separating amount of text, chronological
+order, event representation and episode linking, including an honest negative
+result for linking.
+\end{enumerate}
+
+\section{Related work}
+
+\paragraph{Long-term memory for agents.}
+Generative Agents introduce an experience stream, retrieval and reflection
+\citep{park2023}; MemGPT manages several context tiers \citep{packer2023}. Mem0
+extracts and consolidates durable facts, and its graph variant adds relations
+\citep{chhikara2025mem0}. Zep/Graphiti stores a temporally-aware knowledge graph
+\citep{rasmussen2025zep}; A-MEM organizes notes dynamically \citep{xu2025amem};
+Hindsight separates facts, experience, summaries and beliefs
+\citep{latimer2025hindsight}. HippoRAG uses graph association and personalized
+PageRank \citep{gutierrez2024hipporag}.
+
+Our goal is narrower than building universal memory: bounded multi-party chat
+with identifiable participants. The novelty is not in the mere use of an LLM or
+a vector, nor in ranking raw and derived documents jointly, which is partly
+anticipated by the collapsed-tree mode of RAPTOR \citep{sarthi2024raptor}, but
+in the joint construction of a \emph{retrieval representation + immutable
+evidence address} with speaker and time attribution, and in a controlled
+analysis of when it helps.
+
+\paragraph{Benchmarks and attribution.}
+LoCoMo and LongMemEval evaluate multi-session recall
+\citep{maharana2024,wu2024}. EverMemBench adds long multi-party and multi-group
+projects \citep{hu2026}; GroupMemBench controls reply structure, speaker
+conditioning and implicit links \citep{yang2026}; SocialMemBench measures facts,
+norms, exceptions and attribution in social groups \citep{owolabi2026}. RAG and
+ALCE separate retrieval usefulness from citation quality
+\citep{lewis2020,gao2023}. Likewise, we do not treat a valid source pointer as
+proof that a derived claim is true.
+
+\paragraph{Derived units of indexing.}
+The closest class of work builds a derived representation over the corpus before
+any query. Dense X Retrieval indexes propositions --- atomic self-contained
+statements extracted from passages --- and shows that this granularity beats
+passages and sentences on open-domain QA \citep{chen2023densex}. RAPTOR
+recursively clusters and summarizes chunks into a tree, and in its main mode
+(collapsed tree) flattens it into a single layer and ranks all nodes at once by
+cosine --- both the original leaves and the generated summaries
+\citep{sarthi2024raptor}; by their own measurements, between 18.5\% and 57\% of
+the returned nodes are not leaves.
+
+Let us say it plainly: the idea of a single pool of raw and derived documents is
+not new and is partly anticipated by the collapsed tree. Our difference lies
+elsewhere, in the nature of the unit. Both works are methods over a document
+corpus: their derived units have no author and no time, and the link to the
+source has the granularity of a passage or a leaf, not of a per-fact address.
+RAPTOR itself reports that about 4\% of its summaries contain small
+hallucinations, and its structure does not allow a specific statement to be
+traced back to a specific support. For multi-party correspondence this is not
+enough: the answer must name who said it and when, and the owner of an opinion
+may coincide neither with the author of the message nor with its subject. Our
+derived text is therefore accompanied by an immutable set of (source ID, literal
+quote) pairs checked by a validator, and by separate owner and subject fields.
+
+The conclusions differ too. Dense X reports a broad gain for a fine derived
+unit; on multi-party chat we obtain a narrow one --- events help where evidence
+is scattered in time, and do not help on average (§\ref{sec:mech}). Plausible
+reasons for the difference are a different domain and a markedly stronger dense
+raw baseline than passage retrieval over Wikipedia.
+
+\paragraph{What representations are compared against.}
+Query rewriting and HyDE can reduce the lexical gap on the question side
+\citep{gao2023hyde}; event memory does this on the corpus side, once, before QA,
+and preserves the link to evidence. We compare both mechanisms on Temporal
+Duration: HyDE does not change accuracy relative to \raw{} either at top-10 or
+after matching the token budget and chronological order.
+
+\begin{table}[ht]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\toprule
+Approach & Derived & Versions & Raw prov. & Raw+mem pool & Before QA\\
+\midrule
+Full context / BM25 & -- & -- & yes & -- & yes\\
+Mem0 / summaries & yes & partial & depends & usually no & yes\\
+Zep / Graphiti & yes & yes & depends & no & yes\\
+Hindsight & yes & yes & trace & no & yes\\
+RAPTOR & yes & -- & leaf & yes & yes\\
+Dense X & yes & -- & passage & no & yes\\
+\textbf{\method{} (ours)} & yes & optional & quote & yes & yes\\
+\bottomrule
+\end{tabular}
+\caption{A conceptual, not exhaustive comparison. ``Raw provenance'' is the
+granularity of the return path to the original source; specific implementations
+of the listed systems may differ. RAPTOR in collapsed-tree mode ranks summary
+nodes and original leaves in one pool, so a joint pool by itself is not our
+distinguishing feature.}
+\label{tab:related}
+\end{table}
+
+\section{Problem statement}
+
+Let $M=(m_1,\ldots,m_n)$ be the history of a single bounded conversation space.
+A message $m_i=(id_i,g_i,a_i,t_i,x_i)$ contains the space, the author, the time
+and the text. A builder $B$ receives only $M$ and creates memory $\mathcal{D}$
+before QA opens. For a query $q$, retrieval selects documents
+$R_k(q,\mathcal{D})$, after which the generator answers from the expanded
+context $C_q$.
+
+We distinguish three properties:
+\begin{enumerate}
+\item \textbf{pointer integrity}: the source ID exists, and the quote is
+literally contained in it;
+\item \textbf{semantic support}: the source text actually entails the derived
+description;
+\item \textbf{answer correctness}: the generator used the delivered context
+correctly.
+\end{enumerate}
+A mechanical check guarantees only the first. The second requires an entailment
+or human audit, the third is measured by benchmark scoring.
+
+\section{Method}
+\label{sec:method}
+
+\subsection{The immutable event}
+
+An event has the form
+\[
+e=(z,o,s,k,r,\tau,P,L),
+\]
+where $z$ is the self-contained index text, $o$ the viewpoint owner, $s$ the
+subject, $k$ the event type, $r$ the temporal mode, $\tau$ the observed time,
+$P$ the evidence and $L$ the local context. Evidence consists of pairs
+$(id_i, quote_i)$; time is derived from the real timestamps of the sources.
+
+Separating $o$ from $s$ prevents naive attribution collapse: ``A called B
+unreliable'' is stored as A's opinion about B, not as an unconditional fact
+about B. The types cover state, opinion, decision, commitment, relation,
+exception and stable pattern. A conversational reaction with no long-term
+content may produce no event; a cap of at most two events per turn applies.
+
+\subsection{Query-independent extraction and validation}
+
+The history is split only along natural benchmark session boundaries: in
+EverMemBench by day and group; in GroupMemBench by channel/phase with blocks of
+up to 40 messages. Forced structured output permits an empty list. A
+deterministic validator then removes invented IDs, missing quotes, content-free
+values and invalid enums. Local context may help resolve a pronoun, but does not
+automatically become evidence.
+
+\subsection{Optional versioned episodes}
+
+An episode $E_j=((e_1,\rho_1),\ldots,(e_t,\rho_t))$ is an append-only line where
+$\rho\in\{\texttt{create},\texttt{revise},\texttt{reaffirm},\texttt{augment}\}$.
+For a new event, candidates are searched only within the conversation network.
+The score is
+\[
+S(e,E)=0.6\cos(\phi(z_e),\phi(A_E))+0.4\cos(\phi(z_e),\phi(z_{last(E)})).
+\]
+The three best episodes go to an LLM resolver; when confidence is insufficient a
+new episode is created. The index keeps a hot view of the last five events, but
+cold events and evidence are not deleted. A false split is cheaper here than a
+false merge: split events can still enter retrieval independently, whereas an
+erroneous merge systematically brings in extraneous sources.
+
+\subsection{Unified retrieval and provenance expansion}
+
+A raw turn and a derived document share a common interface
+\[
+d=(id,\ kind,\ index\_text,\ render\_text,\ source\_ids).
+\]
+The question vector is compared against a single pool; the top-$10$ may contain
+both kinds. After ranking, each event/episode expands into unique raw turns. The
+generator sees the derived text as a navigational hint and the dated,
+speaker-grounded sources as the basis of the answer.
+
+This differs from ``show all the profiles'': derived memory is filtered by the
+same relevance criterion as raw history. Static profiles and a description of
+the personal chat are not used in the experiments.
+
+\FloatBarrier
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/architecture.pdf}
+\caption{The full architecture. Memory is built query-independently and sealed
+before QA. In the main variant raw turns and episodes are ranked jointly; in the
+ablation, episodes are replaced by separate events. A derived hit always expands
+into raw sources.}
+\label{fig:architecture}
+\end{figure}
+\FloatBarrier
+
+\section{Experimental protocol}
+
+\subsection{Data and conditions}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{lrrX}
+\toprule
+Benchmark & QA & Spaces & Main test\\
+\midrule
+EverMemBench & 2,400 & 5 projects & 9 task types; temporal controls\\
+SocialMemBench & 1,031 & 43 networks & social attribution, norms, updates\\
+GroupMemBench & 745 & 4 domains & reply structure, implicit, multi-hop\\
+\bottomrule
+\end{tabularx}
+\caption{External datasets used. For GroupMemBench, 102 initially empty
+generation outputs were restored by a separate sealed amendment; the original
+protocol result is retained.}
+\label{tab:data}
+\end{table}
+
+The main paired baseline is a strong dense \raw{}, not a weak keyword-only
+search. The \events{} and \episodes{} conditions add derived documents to the
+same top-$10$. For Temporal Duration we additionally fix the token count, the
+set of expanded raw sources and the chronological order; HyDE generates a
+hypothetical document only for the query embedding and returns the same raw
+documents. All variants use identical official answer/judge prompts inside the
+corresponding benchmark adapter.
+
+EverMemBench uses GPT-4.1-mini for answering, Gemini-3-Flash-preview as the
+open-answer judge, text-embedding-3-large for retrieval and
+gpt-4o-mini-2024-07-18 for memory construction. The answer and judge models,
+their prompts and the exact multiple-choice scoring are taken from the official
+harness; providers are pinned (OpenAI and Google AI Studio respectively) with
+fallbacks disabled --- that is, our rows and the published ones do not differ by
+the judge model. All calls run at \texttt{temperature}${}=0$. SocialMemBench
+follows the GPT-4o-mini official-compatible harness. GroupMemBench uses the
+GPT-5 of the official run; the provider's model version was not pinned by date,
+so byte-level reproduction of these numbers is not guaranteed. Comparisons
+across benchmarks are not to be read as comparisons of models.
+
+\subsection{Metrics and statistics}
+\label{sec:stats}
+
+We report micro accuracy, macro accuracy over question types, evidence
+recall/precision from the intersection of expanded source IDs with gold anchors
+--- the reference spans released by the benchmark, that is, the messages marked
+as the support of the answer --- paired differences, question bootstrap 95\% CI
+and exact McNemar. For the five Ever projects a cluster/sign-flip analysis is
+computed in addition. Evidence metrics are not entailment and not the quality of
+user-facing citations.
+
+Memory and inputs are stored in JSONL/SQLite, sealed with SHA-256 and reused
+across controls. Temporal Duration was selected after inspecting the full
+breakdown and is marked exploratory everywhere. The family of multiple
+comparisons for the mechanistic claim is the nine official EverMemBench
+categories; we report the Holm correction with $m=9$ next to the nominal $p$
+values for it (§\ref{sec:mech}). A separate power ceiling applies: with five
+project clusters the minimum attainable two-sided sign-flip value is
+$2/2^5=.0625$, so cluster-level confirmation is unreachable on these data under
+any outcome.
+
+\paragraph{Two endpoints and their resolving power.}
+We report results at two levels, and they differ not in importance but in
+measurability. \emph{Accuracy} passes through the generator and the judge;
+\emph{evidence recall/precision} are computed mechanically from expanded source
+IDs and gold anchors and depend on neither. The difference is visible
+empirically: on a repeated run of one and the same condition over the same 300
+questions, accuracy produced 12 flipped verdicts out of 300 (4.0\%; 6 in each
+direction, a net shift of exactly $0.00\pp$), whereas the evidence metrics
+agreed \emph{on all 300 questions}. Accuracy is a noisy proxy with ceilings on
+easy categories; the evidence endpoint is deterministic and resolves effects
+that accuracy at the available $n$ cannot resolve in principle. We therefore
+present evidence as the main measured result and accuracy as the question of
+whether it converts (§\ref{sec:frontier}), and deliberately do not substitute
+one for the other.
+
+\section{Results: the system as a whole}
+
+\subsection{EverMemBench: competitiveness}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.96\linewidth]{figures/ever_leaderboard.pdf}
+\caption{Macro accuracy over the nine EverMemBench categories with the
+GPT-4.1-mini answer backbone. Published results are taken from the benchmark
+paper \citep{hu2026}; our rows come from an adapter evaluation on top of the
+official harness. This is not an official leaderboard submission and not a
+paired significance test against other systems.}
+\label{fig:leaderboard}
+\end{figure}
+
+The full \episodes{} system reaches \textbf{47.16\% macro}, and \raw{} 46.34\%.
+Our adapter result is above the values reported by \citet{hu2026} with the same
+answer backbone: MemOS 42.55\%, Zep 39.97\%, Mem0 37.09\%, Full Context 37.44\%
+and MemoBase 34.27\%. The gap to the best published memory system is 4.61 pp.
+
+\resultbox{\textbf{What this means.} Even with imperfect linking, the full
+system shows a high absolute level: our adapter result is above every
+GPT-4.1-mini memory row published by \citet{hu2026}. This is not a controlled
+rerun of other systems and not an official leaderboard submission. However, our
+own strong \raw{} already exceeds them; therefore all 4.61 pp cannot be
+attributed to event/episode memory.}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Condition & Micro & Macro & Evid. recall & Evid. precision\\
+\midrule
+\raw{} & 49.46 & 46.34 & 8.08 & 21.29\\
+\events{} & 49.83 & 46.82 & 8.71 & \textbf{24.50}\\
+\episodes{} & \textbf{50.21} & \textbf{47.16} & \textbf{10.75} & 22.45\\
+\bottomrule
+\end{tabular}
+\caption{EverMemBench, all 2,400 QA, percent. Macro is the mean over the nine
+official question types; micro is over individual QA.}
+\label{tab:ever-main}
+\end{table}
+
+At the micro level \episodes{} improve 49.46\%$\rightarrow$50.21\%:
+$+0.75\pp$, 95\% CI $[-0.5;+2.0]$, $p=.256$. \events{} give 49.83\%:
+$+0.38\pp$, CI $[-0.8;+1.6]$, $p=.589$. The overall gain within our paired
+comparison is therefore not statistically resolved. This does not contradict the
+high absolute macro: the questions ``how strong is the system?'' and ``how much
+of the effect does the component add?'' are different.
+
+\subsection{Transfer across benchmarks}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.92\linewidth]{figures/transfer.pdf}
+\caption{Paired differences \episodes{}$-$\raw{} within each dataset with
+question- or network-bootstrap 95\% CI. Absolute levels are deliberately not
+shown: the metric (accuracy versus MeanQ), the protocols and the answer models
+differ across the three datasets, and comparing them by bar height would be
+incorrect. Group is shown after the targeted repair of empty generations; its
+separately registered temporal/update endpoint ($n=150$ of 745) is shown as its
+own row. No interval excludes zero.}
+\label{fig:transfer}
+\end{figure}
+
+SocialMemBench gives MeanQ .358 for \raw{} and .368 for \episodes{}: $+0.010$,
+network-bootstrap 95\% CI $[-.008;+.028]$. The result is practically identical
+to the published full-context .369 and above the listed benchmark memory rows
+(best Subject-Mem .321), but there is no significant gain of its own.
+
+On accuracy, Social is thus a draw. But at the level of evidence delivery the
+same run gives a resolved positive effect, and this is the only cross-benchmark
+transfer the work managed to establish at all. Paired over 1,031 questions
+against \raw{}: flat memory $+0.90\pp$ precision (CI $[+0.70;+1.11]$,
+$p<10^{-31}$), versioned $+0.86\pp$ ($[+0.65;+1.06]$), episodes $+0.34\pp$
+($[+0.17;+0.51]$) at $+0.99\pp$ recall ($[+0.16;+1.82]$). The magnitude is
+markedly smaller than on Ever ($+3.21\pp$), and the reason is transparent: the
+base evidence recall on Social is 67.5\% against 8.1\% on Ever, so there is
+almost nothing left to improve. The direction, however, reproduces on a second
+dataset, with a different model and a different harness.
+
+On the pre-registered Group primary (Finance+Technology, knowledge
+update+temporal, $n=150$) the original protocol result was
+.340$\rightarrow$.300. A targeted amendment repeated only the 102 empty
+generations with the same sealed prompts and a larger output budget; 102/102
+were restored, and the remaining 1,388 answers were left unchanged. After the
+repair \raw{} reaches .373 and \episodes{} .333: the delta stays at $-4.0\pp$,
+CI $[-9.3;+1.3]$, $p=.210$. Over all 745 QA the result is
+.431$\rightarrow$.415, $-1.6\pp$, CI $[-4.0;+0.8]$, $p=.246$. The negative
+direction is therefore not an artifact of the empty outputs. The repair cost
+\$2.69; 94\% of its output tokens went to hidden reasoning, which confirms the
+cause of the original failure.
+
+It matters that both the slice and the analysis were fixed in advance here: the
+Finance+Technology domains, the knowledge update+temporal types, $n=150$ and the
+statistics were written into the protocol before the run. Unlike the temporal
+effect (§\ref{sec:mech}), where the advance fixing covers only the endpoint and
+not the choice of slice, this result is protected from selection on both sides
+--- and it is negative. The asymmetry of status between the negative and the
+positive results of this work does not point in our favour, and we consider it
+necessary to say so directly.
+
+\warningbox{\textbf{Boundary of generalization.} The method is not a universal
+replacement for raw retrieval. On Social it is neutral on average; on Group the
+current version may displace useful speaker-conditioned raw turns even after the
+repair. This negative transfer is part of the result, not a hidden failure.}
+
+\section{The event representation: what it changes and what it does not}
+\label{sec:mech}
+
+This section is split by endpoint. First we show the effect that is measured
+directly and confirmed on the whole dataset: events change which evidence
+reaches the generator (§\ref{sec:delivery}). Then, where and how this is
+reflected in accuracy (§\ref{sec:temporal}), and finally the registered check of
+whether the two are linked at all (§\ref{sec:frontier}). To anticipate: the
+first is confirmed, the third is not.
+
+\subsection{Evidence delivery: the confirmed effect}
+\label{sec:delivery}
+
+We compare, pairwise and per question, the share of delivered gold sources
+(recall) and their density in the context (precision) over all 2,400 questions
+--- with no slice selection.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/dissociation.pdf}
+\caption{The dissociation. \textbf{A}: paired difference in evidence precision
+\events{}$-$\raw{} over the nine official categories, all 2,400 questions,
+question bootstrap 95\% CI; the sign is positive everywhere, the interval covers
+zero only for Constraint. \textbf{B}: the same axis against the shift in
+accuracy; the asterisk marks the post hoc discovery slice. The category with the
+largest delivery gain (Single-hop, $+8.28\pp$) sits at an accuracy ceiling of
+89.7\% and gains nothing. The sign of the categorical correlation depends on the
+choice of evidence metric and at $n=9$ is not resolved in either direction
+(§\ref{sec:frontier}); the conclusion of this work rests on the stratified test
+over 2,100 questions, not on these nine points.}
+\label{fig:dissociation}
+\end{figure}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Condition & Sources & Gold hits & Evid. precision\\
+\midrule
+\raw{}      & 10.00 & 2.129 & 21.29\\
+\events{}   & \textbf{9.47} & \textbf{2.245} & \textbf{24.50}\\
+\episodes{} & 12.38 & 2.795 & 22.45\\
+\bottomrule
+\end{tabular}
+\caption{EverMemBench, all 2,400 QA: how many unique sources entered the
+context, how many of them turned out to be gold anchors, and what share of the
+context was gold. \events{} dominate \raw{} on both coordinates at once.}
+\label{tab:delivery}
+\end{table}
+
+\events{}$-$\raw{}, paired: precision $+3.21\pp$ (95\% CI $[+2.84;+3.59]$,
+Wilcoxon $p=2.9\cdot10^{-60}$, 855 questions better against 255 worse), recall
+$+0.64\pp$ ($[+0.48;+0.80]$, $p=4.6\cdot10^{-13}$). The sign is positive in all
+nine official categories, and the CI excludes zero in eight out of nine
+(appendix, Table~\ref{tab:evid-cats}).
+
+\paragraph{This is not a mechanical artifact of volume.}
+Precision could have risen on its own if events simply delivered less text. The
+check gives the opposite: \events{} deliver fewer sources than \raw{} (9.47
+versus 10.00) and \emph{never} more --- while finding more gold ones: $2.245$
+against $2.129$ hits per question, a delta of $+0.117$ (CI
+$[+0.083;+0.151]$). Less context, more evidence --- dominance, not a trade-off;
+on 449 questions it is strict. \episodes{} behave differently: they buy recall
+with volume ($+2.68\pp$ recall at $+2.4$ sources), and their precision grows
+more weakly ($+1.16\pp$). This is the first place in the work where linking and
+separate events differ measurably --- but they differ in cost, not in usefulness
+for the answer (§\ref{sec:episodes}).
+
+\paragraph{Query-side expansion does not reproduce this.}
+Matched HyDE on Temporal Duration, at aligned budget and order, gives recall
+statistically indistinguishable from \events{} ($-1.01\pp$, CI
+$[-2.20;+0.17]$), but a markedly sparser context: \events{}$-$HyDE in precision
+is $+6.68\pp$ (CI $[+5.06;+8.27]$, $p=9.3\cdot10^{-16}$). HyDE is not useless in
+itself --- against token-matched \raw{} it gives $+1.18\pp$ precision and
+$+1.61\pp$ recall --- it is dominated. Expansion on the query side and
+normalization on the corpus side move different coordinates.
+
+\resultbox{\textbf{What is established.} The derived layer improves evidence
+delivery reliably, over the whole dataset, in every category, with replication
+on a second benchmark and dominance over query-side expansion. This is measured
+by a deterministic metric that depends neither on the generator, nor on the
+judge, nor on the choice of slice. \emph{Whether this gain remains useful} is a
+separate question, and the answer to it is negative (§\ref{sec:frontier}).}
+
+\subsection{Accuracy: where the effect is visible and why this is the weak spot}
+\label{sec:temporal}
+
+We analyse Temporal Duration as the slice with the largest \emph{relative} gain
+of the full Ever breakdown: \raw{} 12.3\%, \episodes{} 20.0\%, that is
+$+7.7\pp$ and $+63\%$ over the base (Table~\ref{tab:ever-slices}). In absolute
+points, a slightly larger shift is given by Style
+($30.1\%\rightarrow38.1\%$, $+8.0\pp$), but at a three times higher base and
+with no hypothesis about a mechanism; for \events{} without controls, Temporal
+Duration is the largest in absolute points as well ($+4.0\pp$ against $+3.4\pp$
+for Style). We do not explain the gain on Style and do not include it in the
+claims of this work (§\ref{sec:limits}). The choice of slice itself remains post
+hoc. But derived documents expand into several messages, so the generator sees
+17.4 sources on average instead of 10. To separate representation from volume,
+we gave \raw{} the same token budget; then we separately aligned chronological
+order and replaced linked episodes with independent events. A matched HyDE
+control tests whether query-side expansion can produce the same effect without
+building event memory.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/temporal_controls.pdf}
+\caption{Mechanistic controls on the exploratory Temporal Duration slice. EVENTS
+chrono retain an advantage over RAW and HyDE at equal budget and order; EPISODES
+do not exceed EVENTS. Intervals are question bootstrap 95\%.}
+\label{fig:controls}
+\end{figure}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Condition & Accuracy & Evid. recall & Evid. precision\\
+\midrule
+RAW top-10 & 12.3 & 12.7 & 29.6\\
+HyDE-RAW top-10 & 12.0 & 14.1 & 32.4\\
+RAW token-matched & 12.3 & 19.1 & 21.5\\
+RAW token-matched chrono & 14.0 & 19.1 & 21.5\\
+HyDE-RAW token-matched chrono & 14.0 & \textbf{20.7} & 22.6\\
+EVENTS token-matched & 17.0 & 19.7 & 29.3\\
+EVENTS token-matched chrono & 19.3 & 19.7 & 29.3\\
+EPISODES ranked & \textbf{20.0} & \textbf{20.5} & \textbf{31.1}\\
+EPISODES chrono & 18.3 & \textbf{20.5} & \textbf{31.1}\\
+\bottomrule
+\end{tabular}
+\caption{Temporal Duration, $n=300$, percent.}
+\label{tab:controls}
+\end{table}
+
+At equal token budget and order, \events{} reach 19.3\% against 14.0\% for
+\raw{}: $+5.33\pp$, 95\% CI $[+0.67;+10.0]$, nominal $p=.0402$. Matched HyDE
+also gives 14.0\%; the difference \events{}$-$HyDE is $+5.33\pp$, CI
+$[+0.33;+10.33]$, nominal $p=.0479$ (37 wins against 21 losses). The direction
+is positive in all five projects, but with five clusters the minimum attainable
+sign-flip is $p=.0625$. Over all 2,100 questions outside Temporal Duration,
+\events{} give $-0.14\pp$, CI $[-1.33;+1.10]$, $p=.877$. The effect is not
+explained by a simple ``derived memory is better everywhere''; it concentrates
+where scattered temporal boundaries have to be found.
+
+The mechanistic picture does not reduce to a single retrieval metric. \raw{}
+top-10 already has 29.6\% precision of expanded gold sources --- no lower than
+\events{} (29.3\%) --- but at 12.7\% recall it yields only 12.3\% accuracy. To
+raise recall, raw retrieval has to widen the window: token-matched \raw{}
+reaches 19.1\% recall, precision falls to 21.5\%, and accuracy grows only to
+14.0\%. HyDE shifts the same curve further into recall (20.7\%) at 22.6\%
+precision --- and accuracy does not change at all. \events{} hold both
+coordinates at once: recall 19.7\% at the level of token-matched \raw{} and
+precision 29.3\% at the level of \raw{} top-10, which is what 19.3\%
+corresponds to.
+
+On this slice events hold both coordinates at once, whereas raw retrieval gets
+them one at a time: two conditions with almost the same recall (19.1\% and
+19.7\%) give 14.0\% and 19.3\%, and two conditions with almost the same
+precision (29.6\% and 29.3\%) give 12.3\% and 19.3\%. HyDE fits the same
+picture: it moves recall only and does not reproduce the event gain.
+
+An explanation suggests itself --- ``accuracy follows the recall--precision
+frontier of delivered evidence''. We tested it and did not confirm it
+(§\ref{sec:frontier}); the explanation itself remains a description of four rows
+of Table~\ref{tab:controls}, not a mechanism. This is still a post hoc discovery
+slice over five project clusters; the project-level sign-flip is $p=.1875$, and
+288/300 verdicts agreed in a stochastic rerun.
+
+\paragraph{Correction for multiplicity.}
+Temporal Duration was selected from nine official categories after inspecting
+the full breakdown, so the family is $m=9$. The first Holm step compares the
+smallest $p$ of the family against $\alpha/9=.0056$; our $.0402$ and $.0479$
+exceed it, so the procedure stops and no comparison survives the correction
+(Bonferroni equivalents $.36$ and $.43$). The remaining eight $p$ values are not
+needed for this conclusion. Together with the power ceiling ($.0625$ at five
+clusters, §\ref{sec:stats}) this means the effect has no confirmatory
+statistical status either at the question level or at the project level.
+
+\paragraph{What exactly was pre-registered.}
+The endpoint of the matched-HyDE comparison was fixed before any outcomes were
+obtained, but the slice itself was not. Fixing the analysis in advance does not
+protect against selection of the slice, so registration here covers only the
+second half of the procedure. We read the temporal result as
+hypothesis-generating: it is stated narrowly enough for an independent
+confirmatory replication to refute it, and we do not present it as a confirmed
+effect.
+
+\subsection{Does the gain convert into the answer: a registered check}
+\label{sec:frontier}
+
+An explanation that only ever sees the slice on which it was found cannot turn
+out to be wrong. We therefore registered a prediction before the computation: if
+the frontier is a mechanism, it must also describe the 2,100 questions where
+events do not help. The protocol, the reading rule and the power ceilings were
+fixed in advance; the check is fully offline and uses per-question fields of
+already sealed runs, with no new generations.
+
+Each question outside Temporal Duration is assigned to one stratum by how the
+delivered evidence changed in the transition \raw{}$\rightarrow$\events{}:
+\textbf{A} --- events dominate (recall and precision no lower, at least one
+strictly higher), \textbf{B} --- \raw{} dominates, \textbf{C} --- a mixed case
+or equality. The prediction: the accuracy delta is positive in A, negative in B
+and indistinguishable from zero in C.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrrr}
+\toprule
+Stratum & $n$ & $\Delta$acc & 95\% CI & Wins/losses & McNemar\\
+\midrule
+A (events dominate) & 650 & $+0.77$ & $[-1.85;+3.54]$ & 41/36 & $.649$\\
+B (\raw{} dominates) & 209 & $-2.39$ & $[-6.70;+2.39]$ & 9/14 & $.405$\\
+C (mixed) & 1,241 & $-0.24$ & $[-1.53;+1.05]$ & 32/35 & $.807$\\
+\bottomrule
+\end{tabular}
+\caption{Confirmatory check on the 2,100 questions outside the discovery slice,
+\events{}$-$\raw{}, percent and pp.}
+\label{tab:frontier}
+\end{table}
+
+The prediction was not confirmed. In stratum A, where events deliver strictly
+better evidence, the gain is only $+0.77\pp$ at $p=.649$. The direction in B is
+negative, as predicted, and C does indeed contain zero, but the main condition
+of the reading rule is not met. At the category level, the sign of the delta
+agrees with the direction of dominance in 1 case out of 5 ($p=.375$).
+
+The categorical correlation, unlike the stratification, turned out to be
+\emph{metric-dependent}, and we report this as it is. The correlation between
+the gain in evidence F1 and the gain in accuracy over eight categories is
+$\rho=-0.07$ ($p=.87$), but the same correlation computed on the gain in
+evidence \emph{precision} is $\rho=+0.63$ over nine categories ($p=.07$) and
+$\rho=+0.57$ over eight without the discovery slice ($p=.14$). At $n=9$ the
+critical value is $0.68$, so neither quantity is resolved, and the choice
+between them cannot be made from the data: F1 mixes recall and precision, which
+move differently for \events{} and \episodes{} (§\ref{sec:delivery}). We
+therefore do not claim that the link is absent at the category level --- we
+claim that it is not resolved on nine points, whereas the pre-registered
+stratified test on 2,100 questions does not confirm it. The conclusion of this
+work rests on the second, not the first.
+
+What the check does \emph{not} show. There are few discordant pairs --- 77 in
+stratum A, 23 in B, 67 in C --- because a change of context rarely flips an
+answer. At 77 pairs the minimum detectable effect in A is $\approx2.9\pp$, so
+the result excludes a large effect but does not resolve a small one. This is an
+absence of confirmation, not a demonstrated zero.
+
+The conclusion is taken by the rule written down in advance: the frontier
+remains a description of the discovery slice and loses the status of an
+explanation. An improvement in delivered evidence does not by itself imply an
+improvement in the answer, and why events win specifically on Temporal Duration
+remains unknown.
+
+Together with §\ref{sec:delivery} this gives the main result of this work, and
+it is two-sided. The gain in evidence delivery is real, large by statistical
+standards and reproducible; there is no gain in the answer, and the link between
+them is not confirmed by a direct check. We call this a \emph{dissociation}: in
+multi-party conversational memory with a strong dense raw baseline, retrieval
+quality stops being the binding constraint long before it becomes good. Both
+halves are measured on the same sealed runs, so the asymmetry of status here is
+not rhetorical: what is confirmed is what is easier to measure, not what is more
+convenient for the method.
+
+\subsection{What episodes add over events}
+\label{sec:episodes}
+
+New symmetric controls remove the advantage of linking: \episodes{} chrono
+18.3\%, \events{} chrono 19.3\%; the difference is $-1.0\pp$, CI
+$[-5.0;+3.33]$, $p=.755$. In the previously sealed comparison of ranked episodes
+20.0\% against events chrono 19.3\%, the difference was only $+0.67\pp$,
+$p=.888$.
+
+We separately note an inconsistency that we do not explain: chronological order
+helps \raw{} ($+1.7\pp$) and \events{} ($+2.3\pp$), but for \episodes{} it is
+harmful ($20.0\rightarrow18.3$). All three shifts are single-digit question
+counts at $n=300$, and we do not treat them as distinguishable; this is more an
+estimate of the scale of noise than three different effects.
+
+This is an important negative result. A versioned chain is useful for inspection
+and can connect specific changes, but its average contribution to retrieval is
+not separable from a set of individual events. Good retrieval can survive a
+false split by delivering both records independently, so complicating the linker
+is not obliged to improve the endpoint.
+
+\section{Efficiency and engineering properties}
+
+\subsection{Cost and latency}
+
+The full EverMemBench experiment recorded 26,413 API calls and an upper
+list-price estimate of \$8.88. Of this, memory construction with gpt-4o-mini
+costs \$4.76, embeddings \$0.46, answers \$3.12 and the judge \$0.55. These
+figures refer to a research run with caches and do not equal a production TCO.
+
+The serialized episode snapshot occupies 12.77 MB, but a full operational run
+together with the embedding cache is about 2.2 GB; calling the whole system
+``12.8 MB'' is therefore incorrect.\footnote{Mean local retrieval latency grows
+11.59$\rightarrow$13.70 ms (p95 12.70$\rightarrow$15.04 ms); this is ranking
+only, without network, extraction, generator and judge.}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.94\linewidth]{figures/efficiency.pdf}
+\caption{A descriptive GroupMemBench efficiency landscape on the shared sample
+of 606 QA, from the values of the benchmark paper and of our adapter. Point size
+encodes reported storage. Our points use the repaired amendment; cost
+definitions and backends differ, so the plot shows an engineering trade-off but
+does not support a claim of ``cheaper at the same quality''.}
+\label{fig:efficiency}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+System & Accuracy, \% & Ingestion, \$/domain & Storage, GB \\
+\midrule
+Hindsight & 40.4 & 32.10 & 4.25 \\
+\textbf{\raw{} (ours)} & \textbf{34.7} & \textbf{0.23} & \textbf{0.37} \\
+HippoRAG & 33.3 & 8.64 & 5.76 \\
+\textbf{\episodes{} (ours)} & \textbf{32.3} & \textbf{1.92} & \textbf{0.41} \\
+A-Mem & 29.2 & 26.13 & 6.60 \\
+MemGPT & 19.1 & 0.43 & 0.69 \\
+Mem0 & 15.5 & 18.41 & 0.99 \\
+GraphRAG & 12.2 & 12.51 & 3.00 \\
+\bottomrule
+\end{tabular}
+\caption{Explicit values for Figure~\ref{fig:efficiency}. Accuracy is measured
+on the shared 606 QA of GroupMemBench; ingestion cost and storage are taken from
+the corresponding benchmark reports. Our accuracies are recomputed after the
+targeted repair; the cost of the repair answers is not included in ingestion.
+Backends, harnesses and storage definitions differ, so the comparison is
+descriptive.}
+\label{tab:efficiency}
+\end{table}
+
+On this shared sample Hindsight reaches 40.4\% at a reported ingestion of
+\$32.10/domain and 4.25 GB; HippoRAG 33.3\%, \$8.64 and 5.76 GB; our \raw{}
+34.7\%, \$0.23 and 0.37 GB; \episodes{} 32.3\%, \$1.92 and 0.41 GB. The system
+is economical relative to heavy structural solutions, but Hindsight is more
+accurate. Because of the differing harness components this is context, not a
+controlled causal estimate of cost.
+
+\subsection{Reproducibility as part of the method}
+
+Memory construction finishes before any QA is read; snapshots and input
+manifests are sealed with SHA-256. Model calls are cached by content and by
+prompt/schema version. On interruption the process continues from the last
+completed unit. Derived records pass a repeated source-ID check; experiments
+A/B2 were run over one frozen memory without re-extraction.
+
+These details do not improve the benchmark score directly, but they protect the
+main claim from oracle leakage and make it possible to distinguish a change of
+method from repeated sampling.
+
+\section{Error analysis}
+\label{sec:errors}
+
+\paragraph{Extraction misses.}
+If no event is created, the system reduces to \raw{}. Forced structured output
+substantially raises recall relative to voluntary tool calling, but does not
+guarantee completeness.
+
+\paragraph{Attribution and semantic overreach.}
+A literally present quote may support only part of a description; a paraphrase
+may mistake the author of a message for the owner of an opinion. Therefore 100\%
+quote validity means integrity of the address, not 100\% correct facts.
+
+\paragraph{False split and false merge.}
+Free-form subject/facet wording splits one line into several episodes. Retrieval
+often survives a split by finding both records. A merge is more dangerous: it
+brings irrelevant context into every future request. A conservative resolver
+naturally prefers NEW, which shortens the chains but protects precision.
+
+\paragraph{Context displacement.}
+A derived hit occupies a slot in the top-$k$ and sometimes displaces a useful
+raw turn. This is a plausible explanation of the neutral/negative transfer
+outside the temporal slice and especially in the speaker-conditioned
+GroupMemBench.
+
+\section{Limitations}
+\label{sec:limits}
+
+The main mechanism result was found post hoc; all of its controls use the same
+300 questions and are not an independent replication. After the Holm correction
+over the nine official categories it is not significant ($\alpha/9=.0056$
+against the nominal $.0402$ and $.0479$), and the five Ever projects do not
+permit cluster-level significance under any outcome (minimum attainable
+$p=.0625$). Meanwhile the endpoint whose slice and analysis were both fixed in
+advance (Group primary) is negative. The positive conclusion of this work
+therefore remains hypothesis-generating and requires a confirmatory replication
+on an independent slice. Overall accuracy stays around 50\%, and temporal below
+20\%.
+
+Let us bound the confirmed result symmetrically as well. The evidence metric
+measures \emph{delivery}, not usefulness: a gold anchor in the context does not
+mean the generator used it, and a rise in precision does not mean the derived
+text is semantically faithful. The absolute magnitude is modest --- $+0.117$
+gold hits per question --- and a base recall of 8.1\% means that more than 90\%
+of gold evidence is retrieved by none of the conditions; we are moving a small
+share of a small share. Finally, gold anchors are released by the benchmark, and
+all conclusions inherit their completeness.
+
+Let us bound the null separately. Memory is built by a cheap extractor
+(gpt-4o-mini), so the conclusion ``there is no universal event gain'' holds for
+this extraction quality, and the upper bound under a strong extractor is not
+measured. The cap of ``at most two events per turn'' and the weights $0.6/0.4$
+in $S(e,E)$ were chosen a priori and are not ablated. The frontier explanation
+does not survive its own confirmatory check (§\ref{sec:frontier}), so the
+observed advantage on Temporal Duration remains without a mechanism.
+
+The source pointer is mechanically valid, but a full human entailment audit has
+not been completed. Review sheets exist, but are not fully annotated and are not
+used as a published metric. The HyDE control is complete, but uses the same 300
+exploratory questions and is not an independent replication. The targeted
+GroupMemBench amendment restored all 102 initially empty outputs without
+changing the remaining 1,388 answers and verdicts. It remains a post-protocol
+analysis, not an official leaderboard submission. While filling the repair cache
+in parallel, one shared payload was called twice because of a missing
+inter-process lock; the extracted final answers coincided, and the duplicate
+changed no metric. Costs depend on prices as of 12 September 2026, on caches and
+on the chosen APIs; latency was measured locally.
+
+Evidence metrics were not computed for GroupMemBench: the runner stored only the
+verdict. This is the only dataset with a stable negative transfer, so it is
+exactly where the dissociation should have been tested a third time, and exactly
+where we did not test it. The computation is offline and requires no new
+generations --- the expanded source IDs for both conditions are already sealed
+--- but at the time of writing it has not been performed, and the displacement
+hypothesis from §\ref{sec:errors} remains untested.
+
+Finally, the method does not propose a new foundation model and does not solve
+open-domain or multimodal memory. It assumes a bounded conversation network and
+stable participant identifiers; upstream transcription and identity resolution
+are outside the central evaluation.
+
+\section{Conclusion}
+
+We investigated a simple invariant: derived memory should help retrieval without
+substituting itself for the proof. \method{} stores a self-contained event
+representation together with immutable addresses of raw turns, ranks raw and
+derived documents in one pool, and expands retrieved memory back into speaker-
+and time-grounded evidence.
+
+The first half of the invariant holds, and it is measured more reliably than
+anything else in this work. Events improve evidence delivery over all 2,400
+questions ($+3.21\pp$ precision at $+0.64\pp$ recall), while delivering less
+text, not more; the effect is positive in all nine categories, reproduces on
+SocialMemBench and dominates matched HyDE. This is measured by a deterministic
+metric that depends neither on the generator nor on the judge.
+
+The second half does not hold. None of these gains carries over into answer
+quality: across all questions accuracy does not move, and a registered check on
+the 2,100 questions outside the discovery slice does not confirm a link between
+better evidence and better answers. The only nominally significant accuracy gain
+was found post hoc and does not survive correction; the endpoint whose slice and
+analysis were both fixed in advance is negative. Social transfers neutrally,
+Group negatively even after the targeted repair.
+
+We consider this dissociation the main result, not a failure. It means that in
+multi-party conversational memory with a strong dense raw baseline, improving
+retrieval stops paying off before retrieval becomes good: at a base recall of
+8\% the bottleneck is no longer there. The practical consequence for an engineer
+is direct --- \emph{store the evidence first, then build a retrieval abstraction
+over it}: addressability is almost free (\$1.92 per domain, 0.41 GB, $+2$ ms)
+and survives errors in the derived layer, but an accuracy gain from it should
+not be planned for on today's benchmarks. The consequence for a researcher is
+about what to measure: accuracy at these sample sizes does not resolve effects
+that the evidence endpoint resolves by tens of orders of magnitude, and work
+that reports on accuracy alone is likely to see neither its effect nor the
+absence of one.
+
+\FloatBarrier
+\bibliographystyle{plainnat}
+\bibliography{references}
+\clearpage
+\appendix
+
+\section{Full EverMemBench breakdown}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Type & $n$ & RAW & EVENTS & EPISODES\\
+\midrule
+Constraint & 402 & 79.9 & 79.1 & 79.6\\
+Multi-hop & 249 & 12.9 & 13.3 & 13.3\\
+Proactivity & 427 & 65.8 & 64.6 & 64.2\\
+Single-hop & 213 & 89.7 & 89.7 & 87.8\\
+Skill & 169 & 33.7 & 32.0 & 30.8\\
+Style & 176 & 30.1 & 33.5 & 38.1\\
+Temporal Duration & 300 & 12.3 & 16.3 & 20.0\\
+Title & 196 & 46.4 & 45.9 & 43.4\\
+Update & 268 & 46.3 & 47.0 & 47.4\\
+\bottomrule
+\end{tabular}
+\caption{Accuracy over all official categories, percent. EVENTS here is the full
+experiment A without token/order controls.}
+\label{tab:ever-slices}
+\end{table}
+
+\section{Evidence delivery by category}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Type & $n$ & $\Delta$ precision & 95\% CI\\
+\midrule
+Single-hop & 213 & $+8.28$ & $[+6.50;+10.12]$\\
+Temporal Duration & 300 & $+7.51$ & $[+5.92;+9.11]$\\
+Style & 176 & $+6.31$ & $[+4.82;+7.84]$\\
+Update & 268 & $+3.24$ & $[+2.12;+4.39]$\\
+Skill & 169 & $+2.32$ & $[+1.04;+3.73]$\\
+Multi-hop & 249 & $+1.63$ & $[+0.59;+2.67]$\\
+Title & 196 & $+1.55$ & $[+0.85;+2.30]$\\
+Proactivity & 427 & $+1.13$ & $[+0.77;+1.52]$\\
+Constraint & 402 & $+0.30$ & $[-0.07;+0.69]$\\
+\bottomrule
+\end{tabular}
+\caption{\events{}$-$\raw{}, paired difference in evidence precision over the
+nine official EverMemBench categories, percent and pp. The sign is positive
+everywhere; the CI excludes zero in eight categories out of nine. Compare with
+Table~\ref{tab:ever-slices}: the category with the largest delivery gain
+(Single-hop) shows a drop in accuracy, because accuracy there is at the ceiling.}
+\label{tab:evid-cats}
+\end{table}
+
+\section{Exact storage specification}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+Unit & Fields and purpose\\
+\midrule
+RawTurn & ID, conversation network, speaker, timestamp, text; immutable address.\\
+MemoryEvent & ID, index text, type, viewpoint owner, subject, temporal mode,
+observed time, evidence, local context.\\
+EventEvidence & Event ID, raw source ID, literal quote; verifiable link.\\
+EpisodeEvent & Episode ID, Event ID, order, attach operation; append-only history.\\
+SearchDocument & kind, index text, render text, source IDs; common retrieval interface.\\
+\bottomrule
+\end{tabularx}
+\caption{The logical schema does not depend on a JSONL, SQLite or PostgreSQL
+backend.}
+\end{table}
+
+\section{Artifacts and the boundaries of the claims}
+
+Code, protocols and configurations:
+\url{https://github.com/yaroslavlikh/temporal-episodes} (the repository is
+closed until publication). What it redistributes follows the licence of each
+benchmark: per-question predictions and judgments for EverMemBench (data under
+Apache 2.0) and SocialMemBench (CC BY 4.0), and for GroupMemBench, which
+publishes no licence, only aggregates and SHA-256 checksums of the withheld
+per-question files. Model caches, embeddings and the raw corpora are not
+redistributed. The identifiers and hashes of the sealed runs are listed below.
+
+The main immutable directories:
+\begin{itemize}
+\item \texttt{evermembench\_temporal\_episodes\_official\_v1\_20260915\_021550\_MSK};
+\item \texttt{final\_sprint\_A\_events\_full\_v1\_20260915\_233142\_MSK};
+\item \texttt{final\_sprint\_B2\_episodes\_chrono\_v1\_20260915\_232910\_MSK};
+\item \texttt{final\_sprint\_C\_hyde\_raw\_v1\_20260916\_024144\_MSK};
+\item \texttt{final\_sprint\_C2\_hyde\_token\_matched\_v1\_20260916\_024306\_MSK};
+\item \texttt{socialmembench\_temporal\_episodes\_official\_harness\_v1\_20260912\_122626\_MSK}.
+\end{itemize}
+An additional sealed GroupMemBench amendment is stored in
+\path{final_sprint_D_groupmembench_repair_v2}: 1,490 rows,
+\texttt{results\_v2} SHA-256
+\texttt{41ae844eabb292f9}\allowbreak\texttt{d0c7edbeed047698}\allowbreak
+\texttt{1155340ac85c5ef1}\allowbreak\texttt{97d2184fcbd0d4a5},
+\texttt{predictions\_v2} SHA-256
+\texttt{20f2c60180a58d37}\allowbreak\texttt{c63f96904896266c}\allowbreak
+\texttt{8ac5805f83d822d3}\allowbreak\texttt{21a34926850c8a96}.
+The directory was not copied into a separate frozen container; its eight source
+files were verified against the manifest and are unchanged. Revisions used:
+EverMemBench code \texttt{e10b3d52f0e4}, data \texttt{a6b210a32248};
+GroupMemBench \texttt{e2682e01ff49}. The figure script hashes the input
+summaries/reports. Publishing the code does not by itself grant permission to
+redistribute the benchmark corpora.
+
+\paragraph{Which Social run is canonical.}
+Two SocialMemBench pipelines are present in the artifacts, and they must not be
+mixed. The canonical one is
+\path{socialmembench_temporal_episodes_official_harness_v1}:
+\texttt{text-embedding-3-small}, one cosine top-10 per condition, an identical
+code path for answer/judge/packing; every number in this work comes from it, and
+its RAW/FLAT/VERSIONED rows are the unmodified results of the frozen run of
+2026-09-11. The second, \path{socialmembench_temporal_episodes_full_v1}, is an
+earlier hybrid (local \texttt{MiniLM}, raw top-12 + episode top-12, a 400-word
+budget); its \raw{} gives an evidence recall of 48.5\% against 67.5\% for the
+canonical one. Comparing a condition from one run against \raw{} from the other
+produces plausible and entirely false numbers; we note this here because both
+directories are distributed together.
+
+\paragraph{Recomputation of the evidence endpoint.}
+All the paired numbers of §\ref{sec:delivery} and of
+Table~\ref{tab:evid-cats} are reproduced offline by the script
+\path{research/evidence_endpoint_analysis.py}, which reads only sealed runs,
+makes no API calls and writes
+\path{research/figures/evidence_endpoint_results.json}; the manuscript takes its
+numbers from there. In the public repository the same values, together with the
+registered frontier check of §\ref{sec:frontier}, are recomputed from the
+published per-question files by \path{analysis/verify_evidence_endpoint.py},
+which compares each one against the value printed here and fails if any of them
+disagrees.
+
+\paragraph{Admissible formulations.}
+One may speak of the competitiveness of the full system in an adapter
+evaluation, of a confirmed improvement in \emph{evidence delivery} over the
+whole dataset and its replication on SocialMemBench, of dominance over matched
+HyDE in the density of delivered evidence, of a nominal temporal signal in
+accuracy, and of provenance as addressability of the source. One may not call
+the result an official SOTA, a proven universal gain, semantically verified
+facts, or a proven benefit of episode linking. Nor may one claim that events win
+\emph{because} they improve the recall--precision frontier of delivered
+evidence: the registered check did not confirm this (§\ref{sec:frontier}). The
+confirmed delivery result may not be carried over to answer quality: that is
+exactly the implication this work tests and does not confirm. An improvement in
+precision may not be called semantic faithfulness of the derived text, and it
+may not be extended to GroupMemBench, where evidence metrics were not computed.
+
+\end{document}
