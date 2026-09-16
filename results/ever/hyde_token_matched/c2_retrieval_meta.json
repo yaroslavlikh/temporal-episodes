@@ -1,0 +1,11 @@
+{
+  "embedding_model": "text-embedding-3-large",
+  "rank_depth": 400,
+  "rank_depth_exhausted": 0,
+  "token_target": "frozen RAW+EVENTS-token-matched context_tokens",
+  "row_count": 300,
+  "identity_fields": [
+    "qa_key"
+  ],
+  "sha256": "e10d7aafd87f5662eb0233edb2f75f0a6a7232043a5fcdf9ea00d5d777ee2e67"
+}

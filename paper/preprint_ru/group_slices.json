@@ -1,0 +1,194 @@
+[
+  {
+    "domain": "Finance",
+    "kind": "multi_hop",
+    "n": 48,
+    "raw_correct": 27,
+    "episodes_correct": 27,
+    "delta_pp": 0.0
+  },
+  {
+    "domain": "Finance",
+    "kind": "knowledge_update",
+    "n": 32,
+    "raw_correct": 11,
+    "episodes_correct": 10,
+    "delta_pp": -3.125
+  },
+  {
+    "domain": "Finance",
+    "kind": "temporal",
+    "n": 45,
+    "raw_correct": 23,
+    "episodes_correct": 19,
+    "delta_pp": -8.88888888888889
+  },
+  {
+    "domain": "Finance",
+    "kind": "user_implicit",
+    "n": 15,
+    "raw_correct": 9,
+    "episodes_correct": 10,
+    "delta_pp": 6.666666666666667
+  },
+  {
+    "domain": "Finance",
+    "kind": "term_ambiguity",
+    "n": 45,
+    "raw_correct": 11,
+    "episodes_correct": 13,
+    "delta_pp": 4.444444444444445
+  },
+  {
+    "domain": "Finance",
+    "kind": "abstention",
+    "n": 29,
+    "raw_correct": 20,
+    "episodes_correct": 21,
+    "delta_pp": 3.4482758620689653
+  },
+  {
+    "domain": "Technology",
+    "kind": "multi_hop",
+    "n": 41,
+    "raw_correct": 13,
+    "episodes_correct": 12,
+    "delta_pp": -2.4390243902439024
+  },
+  {
+    "domain": "Technology",
+    "kind": "knowledge_update",
+    "n": 36,
+    "raw_correct": 8,
+    "episodes_correct": 9,
+    "delta_pp": 2.7777777777777777
+  },
+  {
+    "domain": "Technology",
+    "kind": "temporal",
+    "n": 37,
+    "raw_correct": 9,
+    "episodes_correct": 7,
+    "delta_pp": -5.405405405405405
+  },
+  {
+    "domain": "Technology",
+    "kind": "user_implicit",
+    "n": 28,
+    "raw_correct": 13,
+    "episodes_correct": 13,
+    "delta_pp": 0.0
+  },
+  {
+    "domain": "Technology",
+    "kind": "term_ambiguity",
+    "n": 43,
+    "raw_correct": 12,
+    "episodes_correct": 9,
+    "delta_pp": -6.976744186046512
+  },
+  {
+    "domain": "Technology",
+    "kind": "abstention",
+    "n": 28,
+    "raw_correct": 23,
+    "episodes_correct": 22,
+    "delta_pp": -3.571428571428571
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "multi_hop",
+    "n": 48,
+    "raw_correct": 12,
+    "episodes_correct": 11,
+    "delta_pp": -2.083333333333333
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "knowledge_update",
+    "n": 17,
+    "raw_correct": 6,
+    "episodes_correct": 3,
+    "delta_pp": -17.647058823529413
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "temporal",
+    "n": 37,
+    "raw_correct": 6,
+    "episodes_correct": 9,
+    "delta_pp": 8.108108108108109
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "user_implicit",
+    "n": 2,
+    "raw_correct": 1,
+    "episodes_correct": 1,
+    "delta_pp": 0.0
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "term_ambiguity",
+    "n": 7,
+    "raw_correct": 1,
+    "episodes_correct": 0,
+    "delta_pp": -14.285714285714285
+  },
+  {
+    "domain": "Healthcare",
+    "kind": "abstention",
+    "n": 34,
+    "raw_correct": 28,
+    "episodes_correct": 32,
+    "delta_pp": 11.76470588235294
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "multi_hop",
+    "n": 45,
+    "raw_correct": 16,
+    "episodes_correct": 12,
+    "delta_pp": -8.88888888888889
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "knowledge_update",
+    "n": 22,
+    "raw_correct": 4,
+    "episodes_correct": 2,
+    "delta_pp": -9.090909090909092
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "temporal",
+    "n": 43,
+    "raw_correct": 16,
+    "episodes_correct": 17,
+    "delta_pp": 2.3255813953488373
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "user_implicit",
+    "n": 4,
+    "raw_correct": 1,
+    "episodes_correct": 0,
+    "delta_pp": -25.0
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "term_ambiguity",
+    "n": 11,
+    "raw_correct": 3,
+    "episodes_correct": 3,
+    "delta_pp": 0.0
+  },
+  {
+    "domain": "Manufacturing",
+    "kind": "abstention",
+    "n": 48,
+    "raw_correct": 40,
+    "episodes_correct": 38,
+    "delta_pp": -4.166666666666666
+  }
+]

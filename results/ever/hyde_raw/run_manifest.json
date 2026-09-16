@@ -1,0 +1,56 @@
+{
+  "experiment": "C",
+  "condition": "HyDE-RAW",
+  "protocol": "FINAL_EXPERIMENTS_PROTOCOL.md",
+  "protocol_sha256": "bf278ba6213dccfc904524d1949b5597053175e31f751c2d081903c3f6e25029",
+  "runner": "final_sprint_evermembench.py",
+  "runner_sha256": "ad8cfb90f5c818d973a9a4e4f28b5641c341f04641e59a16c3ead00a8c03a3fd",
+  "dependencies_sha256": {
+    "evermembench_chronological_order_control.py": "3378d1904cce3f84a0547b4f98263359ce38ef662c17ddf92e8c41a8848a5503",
+    "evermembench_episode_run.py": "2839109d6e06409e58f201f55541d4b4b95ec0ffd31ce89446c76008c08010ef",
+    "evermembench_parallel_resume.py": "fc438611c63586f1267bf748d6ce3ed7a1cf65bea1ec0956aa01493268415d76",
+    "evermembench_temporal_budget_control.py": "522ad5416c2566139ba4647cf19d288a62e2511bd99d22382348ebe7447c31c6",
+    "evermembench_unlinked_events_control.py": "df0b02827fedd40487bef66eaa659fc81f81a5659f3717ad5e799c756df0746b",
+    "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97"
+  },
+  "frozen_sha256sums": {
+    "evermembench_temporal_episodes_official_v1_20260915_021550_MSK": "9dae482ef6e984b119dc76ed5a4fa214d5f5f643a1a68e0cde4b70ce712cf37f",
+    "evermembench_temporal_budget_control_v1_20260915_021134_MSK": "cd90231d87962d2ca152495cf7510fb9fb52c9a1164f66799b96825bbb4b7089",
+    "evermembench_unlinked_events_control_v1_20260915_022532_MSK": "ca9a75a4b2b30ad731bc8492b7c0e537f42d549ddd5bb1d39f47a09ca8ceb7fe",
+    "evermembench_chronological_order_control_v2_20260915_190741_MSK": "c83d8c168b7fe06b79a7c4336f4feda3aae813f059a3821baebc30cc63cefb02"
+  },
+  "event_index_meta_sha256": "7c560190ff465b49e0433bfe79836e7ffa6e3b4b6924ca0e88e25d2ebd1f48f1",
+  "inputs_sha256": "3b4d7de3a13f7d144b355ae9be68a76f644a972b3a874738eefcd07f40210d8c",
+  "checks": {
+    "frozen_sha256sums_verified": {
+      "evermembench_temporal_episodes_official_v1_20260915_021550_MSK": 573,
+      "evermembench_temporal_budget_control_v1_20260915_021134_MSK": 31,
+      "evermembench_unlinked_events_control_v1_20260915_022532_MSK": 170,
+      "evermembench_chronological_order_control_v2_20260915_190741_MSK": 36
+    },
+    "cache_entries_available": 8467
+  },
+  "ceiling_usd": 2.0843127078598247,
+  "answer_model": "openai/gpt-4.1-mini",
+  "answer_provider": {
+    "provider": {
+      "order": [
+        "openai"
+      ],
+      "allow_fallbacks": false
+    }
+  },
+  "answer_max_tokens": 1000,
+  "judge_model": "google/gemini-3-flash-preview",
+  "judge_provider": {
+    "provider": {
+      "order": [
+        "google-ai-studio"
+      ],
+      "allow_fallbacks": false
+    }
+  },
+  "judge_call": "official_evaluator_no_max_tokens_v1",
+  "top_k": 10,
+  "hyde_prompt": "Write a short passage, two to four sentences, of the kind that could appear in a workplace team chat and would contain the answer to the question below. Write plausible chat content and invent specific details if needed. Output only the passage.\n\nQuestion: {question}"
+}

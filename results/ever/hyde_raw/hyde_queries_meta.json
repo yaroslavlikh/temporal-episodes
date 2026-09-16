@@ -1,0 +1,10 @@
+{
+  "model": "openai/gpt-4.1-mini",
+  "prompt": "Write a short passage, two to four sentences, of the kind that could appear in a workplace team chat and would contain the answer to the question below. Write plausible chat content and invent specific details if needed. Output only the passage.\n\nQuestion: {question}",
+  "max_tokens": 200,
+  "row_count": 300,
+  "identity_fields": [
+    "qa_key"
+  ],
+  "sha256": "9a983fd934c25f78a0061c625a475a64082a91d8b8e579e2abec760939979ca2"
+}

@@ -1,0 +1,9 @@
+{
+  "embedding_model": "text-embedding-3-large",
+  "top_k": 10,
+  "row_count": 300,
+  "identity_fields": [
+    "qa_key"
+  ],
+  "sha256": "0c93e70ba3cb99810c07ceda4c797674c1fa7de92fa0bc7d09a1dd54632a697f"
+}

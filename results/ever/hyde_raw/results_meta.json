@@ -1,0 +1,14 @@
+{
+  "experiment": "C",
+  "protocol_sha256": "bf278ba6213dccfc904524d1949b5597053175e31f751c2d081903c3f6e25029",
+  "runner_sha256": "ad8cfb90f5c818d973a9a4e4f28b5641c341f04641e59a16c3ead00a8c03a3fd",
+  "judge_model": "google/gemini-3-flash-preview",
+  "judge_call": "official_evaluator_no_max_tokens_v1",
+  "predictions_sha256": "8bd4b32dc7d961abd6fa7761a7c8fdbbb494b382fb0934aba635d5f7eb4ffb6c",
+  "row_count": 300,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "93a98e4641db627bd9223c1bb8153c72af199945bcb4759eb62df1c17837e686"
+}

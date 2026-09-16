@@ -1,0 +1,171 @@
+{
+  "source": "Repaired GroupMemBench run (final_sprint_D_groupmembench_repair_v2): the 102 originally empty gpt-5 generations were regenerated from the same sealed prompts with a larger output budget; the other 1,388 answers and their verdicts are unchanged. Computed from the withheld per-question files listed in withheld_sha256.json with the reproduction statistics functions (paired bootstrap 20,000 samples, seed 20260912; exact McNemar).",
+  "relation_to_protocol_result": "The original protocol result (results/group/aggregates.json) is retained unchanged. This is a post-protocol amendment, not a replacement.",
+  "primary_endpoint": {
+    "n": 150,
+    "RAW": 0.373333,
+    "RAW+EPISODES": 0.333333,
+    "delta": -0.04,
+    "ci95": [
+      -0.093333,
+      0.013333
+    ],
+    "episodes_only_correct": 5,
+    "raw_only_correct": 11,
+    "mcnemar_p": 0.210114
+  },
+  "all_questions": {
+    "n": 745,
+    "RAW": 0.430872,
+    "RAW+EPISODES": 0.414765,
+    "delta": -0.016107,
+    "ci95": [
+      -0.040268,
+      0.008054
+    ],
+    "episodes_only_correct": 39,
+    "raw_only_correct": 51,
+    "mcnemar_p": 0.246106
+  },
+  "by_category": {
+    "abstention": {
+      "n": 139,
+      "RAW": 0.798561,
+      "RAW+EPISODES": 0.81295,
+      "delta": 0.014388,
+      "ci95": [
+        -0.043165,
+        0.071942
+      ],
+      "episodes_only_correct": 10,
+      "raw_only_correct": 8,
+      "mcnemar_p": 0.814529
+    },
+    "knowledge_update": {
+      "n": 107,
+      "RAW": 0.280374,
+      "RAW+EPISODES": 0.233645,
+      "delta": -0.046729,
+      "ci95": [
+        -0.121495,
+        0.028037
+      ],
+      "episodes_only_correct": 6,
+      "raw_only_correct": 11,
+      "mcnemar_p": 0.332306
+    },
+    "multi_hop": {
+      "n": 182,
+      "RAW": 0.379121,
+      "RAW+EPISODES": 0.340659,
+      "delta": -0.038462,
+      "ci95": [
+        -0.082418,
+        0.0
+      ],
+      "episodes_only_correct": 4,
+      "raw_only_correct": 11,
+      "mcnemar_p": 0.118469
+    },
+    "temporal": {
+      "n": 162,
+      "RAW": 0.37037,
+      "RAW+EPISODES": 0.364198,
+      "delta": -0.006173,
+      "ci95": [
+        -0.055556,
+        0.049383
+      ],
+      "episodes_only_correct": 9,
+      "raw_only_correct": 10,
+      "mcnemar_p": 1.0
+    },
+    "term_ambiguity": {
+      "n": 106,
+      "RAW": 0.254717,
+      "RAW+EPISODES": 0.245283,
+      "delta": -0.009434,
+      "ci95": [
+        -0.084906,
+        0.066038
+      ],
+      "episodes_only_correct": 7,
+      "raw_only_correct": 8,
+      "mcnemar_p": 1.0
+    },
+    "user_implicit": {
+      "n": 49,
+      "RAW": 0.489796,
+      "RAW+EPISODES": 0.489796,
+      "delta": 0.0,
+      "ci95": [
+        -0.102041,
+        0.102041
+      ],
+      "episodes_only_correct": 3,
+      "raw_only_correct": 3,
+      "mcnemar_p": 1.0
+    }
+  },
+  "by_domain": {
+    "Finance": {
+      "n": 214,
+      "RAW": 0.481308,
+      "RAW+EPISODES": 0.481308,
+      "delta": 0.0,
+      "ci95": [
+        -0.037383,
+        0.037383
+      ],
+      "episodes_only_correct": 9,
+      "raw_only_correct": 9,
+      "mcnemar_p": 1.0
+    },
+    "Healthcare": {
+      "n": 145,
+      "RAW": 0.386207,
+      "RAW+EPISODES": 0.393103,
+      "delta": 0.006897,
+      "ci95": [
+        -0.055172,
+        0.068966
+      ],
+      "episodes_only_correct": 12,
+      "raw_only_correct": 11,
+      "mcnemar_p": 1.0
+    },
+    "Manufacturing": {
+      "n": 173,
+      "RAW": 0.462428,
+      "RAW+EPISODES": 0.427746,
+      "delta": -0.034682,
+      "ci95": [
+        -0.086705,
+        0.017341
+      ],
+      "episodes_only_correct": 9,
+      "raw_only_correct": 15,
+      "mcnemar_p": 0.307456
+    },
+    "Technology": {
+      "n": 213,
+      "RAW": 0.384977,
+      "RAW+EPISODES": 0.352113,
+      "delta": -0.032864,
+      "ci95": [
+        -0.079812,
+        0.014085
+      ],
+      "episodes_only_correct": 9,
+      "raw_only_correct": 16,
+      "mcnemar_p": 0.229523
+    }
+  },
+  "repair": {
+    "regenerated_answers": 102,
+    "repair_status_counts": {
+      "original": 1388,
+      "repaired": 102
+    }
+  }
+}

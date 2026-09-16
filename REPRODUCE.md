@@ -116,3 +116,18 @@ Estimated from recorded token usage at uncached list prices (2026-09-12 snapshot
   from that location; `protocols/` holds the same files for readers.
 - `test_paper_external_benchmarks.py` needs the official GroupMemBench and EverMemBench sources
   in `reproduction/.research_runs/official_sources/`, which the runners download on first use.
+
+## Verifying the dissociation result
+
+`analysis/verify_evidence_endpoint.py` recomputes every number behind the evidence-delivery
+result and the registered frontier check, directly from the per-question files in
+`results/`. It makes no API calls and needs no keys:
+
+```bash
+python3 analysis/verify_evidence_endpoint.py
+```
+
+It prints each recomputed value next to the one printed in the manuscript and exits
+non-zero if any of them disagree. The frontier check is deliberately included even though
+its registered prediction failed; `protocols/original/FRONTIER_MECHANISM_PREDICTION_PROTOCOL.md`
+states the reading rule that was fixed before the numbers existed.

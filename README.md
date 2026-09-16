@@ -3,65 +3,86 @@
 Reproduction package for a study of **provenance-backed memory for long-lived multi-party
 conversations**. Memory is built without access to questions: an LLM extracts events from
 bounded chat sessions, every event keeps verbatim quotes that are checked mechanically
-against the source messages, and events are linked into append-only temporal episodes.
-Episodes are retrieved together with raw messages, and every episode expands into the
-messages it cites.
+against the source messages, and events are optionally linked into append-only temporal
+episodes. Derived units are retrieved in one ranked pool together with raw messages, and
+every derived hit expands back into the messages it cites.
 
 The method is evaluated on three external multi-party benchmarks under their official or
-official-compatible harnesses, with controlled ablations. A paper is in preparation.
+official-compatible harnesses, with controlled ablations and registered protocols.
 
-## Results at a glance
+## The result: a dissociation
 
-Adding episodes to raw retrieval, paired over the same questions:
+The derived layer reliably improves **which evidence reaches the generator**. It does not
+improve **the answer**.
 
-| Benchmark | Endpoint | Raw retrieval | + Temporal episodes | Δ, 95% CI |
+**Confirmed — evidence delivery.** Paired over all 2,400 EverMemBench questions, events
+raise the precision of delivered gold sources by **+3.21 pp** (95% CI [+2.84, +3.59],
+p < 10⁻⁵⁹) while also raising recall by **+0.64 pp** ([+0.48, +0.80]). This is not a
+trade: events deliver *fewer* sources than raw retrieval (9.47 vs 10.00, never more) and
+still find *more* gold ones (2.245 vs 2.129 per question). The sign is positive in all
+nine official categories, the interval excludes zero in eight. It replicates on
+SocialMemBench (+0.90 pp precision for flat memory, p < 10⁻³¹) and dominates query-side
+expansion: at statistically indistinguishable recall, events deliver **+6.68 pp**
+([+5.06, +8.27]) denser evidence than matched HyDE.
+
+**Not confirmed — answer quality.** None of that converts. Across 2,400 questions micro
+accuracy moves +0.38 pp ([−0.8, +1.6]). A prediction registered before the computation —
+that questions where events deliver strictly better evidence should be answered better —
+fails on the 2,100 questions outside the discovery slice: in that stratum (n = 650) the
+gain is **+0.77 pp, p = .649**. The only nominally significant accuracy gain sits on a
+post-hoc slice and does not survive a Holm correction over nine categories; the endpoint
+whose slice *and* analysis were both fixed in advance (GroupMemBench primary, n = 150) is
+negative.
+
+| Benchmark | Endpoint | Raw | + Episodes | Δ, 95% CI |
 |---|---|---:|---:|---|
-| SocialMemBench | network-weighted mean score, 1,031 QA | 35.8 | 36.7 | +1.0 [−0.8, +2.8] |
-| GroupMemBench | knowledge update + temporal, filtered, 150 QA | 34.0 | 30.0 | −4.0 [−9.3, +1.3] |
 | EverMemBench-Dynamic | accuracy, 2,400 QA | 49.5 | 50.2 | +0.8 [−0.5, +2.0] |
+| SocialMemBench | network-weighted mean, 1,031 QA | 35.8 | 36.8 | +1.0 [−0.8, +2.8] |
+| GroupMemBench | registered primary, 150 QA (repaired) | 37.3 | 33.3 | −4.0 [−9.3, +1.3] |
 
-Overall, episodes did not change accuracy measurably. On EverMemBench Temporal Duration
-questions (n = 300), they did:
+Why the two endpoints differ in what they can resolve: evidence metrics are computed
+mechanically from exposed source IDs and gold anchors, bypassing both generator and judge —
+a rerun of one identical condition reproduced them on **300/300** questions, while accuracy
+flipped **12** verdicts. Accuracy is a noisy proxy with ceilings on easy categories; the
+category with the largest delivery gain (Single-hop, +8.28 pp) sits at 89.7% accuracy and
+gains nothing.
 
-| Condition (EverMemBench Temporal Duration) | Accuracy |
-|---|---:|
-| Raw retrieval, top-10 | 12.3 |
-| Raw retrieval, same token budget as episodes | 12.3 |
-| Unlinked events, same token budget | 17.0 |
-| Temporal episodes | 20.0 |
-
-- Episodes vs. raw retrieval at an equal token budget: **+7.7 pp [+3.3, +12.0]**, McNemar
-  p = 0.001; a rerun of the episode condition agreed on 96% of questions.
-- Unlinked events vs. raw retrieval at an equal token budget: +4.7 pp [+0.7, +8.7].
-- Episodes vs. the same events unlinked: +3.0 pp [−1.3, +7.3] — this sample does not resolve
-  the contribution of chronological linking.
-
-The Temporal effect was found in the same EverMemBench data used for the controls, so the
-controls are mechanistic ablations, not an independent replication. These are adapter
-evaluations, not official leaderboard submissions. Every number above is recomputed by
-`analysis/verify_results.py`; the full history of experiments is in `EXPERIMENT_LOG.md`.
+Practical reading: addressable evidence is nearly free ($1.92 per domain ingestion versus
+$32.10 for Hindsight, 0.41 GB, +2 ms), but a gain in answer accuracy should not be planned
+for on today's benchmarks.
 
 ## Repository layout
 
 ```
 reproduction/   exact runners, method code and tests that produced the results (see REDACTIONS.md)
-analysis/       offline verification, LaTeX tables and figures; published baselines used for comparison
-protocols/      analysis protocols and amendments, verbatim
+analysis/       offline verification, LaTeX tables and figures; published baselines
+protocols/      registered protocols and amendments, verbatim
 results/        per-question predictions and judgments (SocialMemBench, EverMemBench),
-                GroupMemBench aggregates, SHA-256 manifest
-paper/          LaTeX sources, tables and figures
+                GroupMemBench aggregates only, SHA-256 manifest
+paper/          preprint_ru/ — manuscript source and PDF; tables/ and figures/ — generated
 ```
 
 ## Quick start
 
 ```bash
 python3 -m pip install -r requirements.lock
-python3 analysis/verify_results.py     # checksums + every reported statistic, no API calls
-python3 analysis/make_tables.py
-python3 analysis/make_figures.py
+python3 analysis/verify_results.py            # checksums + every accuracy statistic
+python3 analysis/verify_evidence_endpoint.py  # the dissociation result, recomputed
 ```
 
-Re-running the experiments requires OpenAI and OpenRouter API keys; see `REPRODUCE.md`.
+Both are offline and make no API calls. Re-running the experiments themselves requires
+OpenAI and OpenRouter keys; see `REPRODUCE.md`. The full experiment history, including
+results that were superseded, is in `EXPERIMENT_LOG.md`.
+
+## Scope and honesty notes
+
+These are adapter evaluations under official harnesses, not official leaderboard
+submissions. The Temporal Duration accuracy effect was found in the same data used for its
+controls, so those controls are mechanistic ablations, not an independent replication.
+Evidence metrics measure **delivery**, not usefulness or semantic faithfulness: a gold
+anchor in context does not mean the generator used it. Base evidence recall is 8.1%, so
+over 90% of gold evidence is retrieved by no condition at all. GroupMemBench evidence
+metrics were never computed — that runner stored verdicts only.
 
 ## Licenses
 

@@ -1,0 +1,9 @@
+{
+  "repairs_sha256": "d640a1cbdc42adc03f78e1fe19ca7c3b0dbcf780bb015d61ea4c386647e2ce39",
+  "row_count": 1490,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "20f2c60180a58d37c63f96904896266c8ac5805f83d822d321a34926850c8a96"
+}

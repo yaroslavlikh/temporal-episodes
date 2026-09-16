@@ -98,3 +98,64 @@ sample. `results/ever/unlinked_events_control/`.
 
 Experiments 8 and 9 are mechanistic ablations on the same questions where the TP effect was
 found; they are not independent replications.
+
+## 10. Chronological order control, v2 — 2026-09-15
+
+Protocol frozen and hashed before new predictions
+(`protocols/original/EVERMEMBENCH_CHRONOLOGICAL_ORDER_CONTROL_PROTOCOL_V2.md`). Separates
+context *order* from context *content* on the Temporal Duration slice: raw and event
+conditions are re-packed in chronological rather than ranked order at a matched token
+budget. Chronological order is worth +1.7 pp to raw and +2.3 pp to events; for episodes it
+is negative (20.0 → 18.3). All three shifts are single-digit question counts on n = 300 and
+are not treated as distinguishable. `results/ever/chronological_order_control/`.
+
+## 11. Full-set unlinked events run (experiment A) — 2026-09-15
+
+The event condition extended from the 300-question slice to all 2,400 questions, over the
+same sealed memory. Accuracy 49.83% versus raw 49.46% (+0.38 pp, [−0.8, +1.6], p = .589):
+no average gain. This run is also the source of the per-question evidence metrics used for
+the dissociation result. `results/ever/events_full/`.
+
+## 12. HyDE control and its token-matched amendment — 2026-09-16
+
+Protocol and amendment frozen before any generation
+(`protocols/original/EVERMEMBENCH_HYDE_TOKEN_MATCHED_AMENDMENT.md`). The amendment was
+written because the registered comparison mixed two confounds — 2,456 versus ~1,052 context
+tokens and chronological versus ranked order — that the budget and order controls exist to
+remove. Experiment C (HyDE at top-10) was left untouched; C2 adds a token- and order-matched
+HyDE arm built from C's sealed generations. Accuracy: HyDE 14.0%, raw 14.0%, events 19.3%.
+Query-side expansion buys recall (+1.61 pp over matched raw) and no precision; events buy
+both, and deliver +6.68 pp denser evidence than HyDE at indistinguishable recall.
+`results/ever/hyde_raw/`, `results/ever/hyde_token_matched/`.
+
+## 13. GroupMemBench empty-answer repair — 2026-09-16
+
+102 of 1,490 gpt-5 generations came back empty because the output budget was consumed by
+hidden reasoning (94% of repair output tokens). All 102 were regenerated from the same
+sealed prompts with a larger budget; the other 1,388 answers and verdicts were not touched.
+The negative transfer is not an artifact of the empty answers: the registered primary goes
+from .340→.300 to .373→.333, delta unchanged at −4.0 pp [−9.3, +1.3], p = .210. The original
+protocol result is retained unchanged in `results/group/`; the amendment is in
+`results/group/repair_v2/` as aggregates and checksums only, per GroupMemBench's licensing.
+
+## 14. Evidence-delivery endpoint and the registered frontier check — 2026-09-16
+
+Two things happened here, and the order matters.
+
+First, an explanation offered for the Temporal Duration accuracy effect — that accuracy
+follows the recall/precision frontier of delivered evidence — was turned into a falsifiable
+prediction and registered before computation
+(`protocols/original/FRONTIER_MECHANISM_PREDICTION_PROTOCOL.md`, sha256 `0419cccb…`), with
+its reading rule and power ceilings fixed in advance. On the 2,100 questions outside the
+discovery slice the prediction **failed**: where events deliver strictly better evidence
+(n = 650) accuracy gains +0.77 pp, p = .649. Per the registered rule the frontier lost the
+status of an explanation. Sensitivity is bounded and stated: 77 discordant pairs in that
+stratum, minimum detectable effect ≈ 2.9 pp, so this is an absence of confirmation rather
+than a demonstrated zero.
+
+Second, the evidence endpoint itself was analysed paired and per question across the whole
+set, and it is the one result that holds: +3.21 pp precision and +0.64 pp recall over all
+2,400 questions, by dominance rather than trade-off, positive in all nine categories,
+replicated on SocialMemBench and dominating matched HyDE. Together these give the
+dissociation the manuscript now reports as its main result. Recompute with
+`analysis/verify_evidence_endpoint.py` (24 checks, offline).

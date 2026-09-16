@@ -1,0 +1,9 @@
+{
+  "runner_sha256": "62df0718a94a303c091545a54196d4d3cc69145500cd810f972deca0fcfefa54",
+  "row_count": 102,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "d640a1cbdc42adc03f78e1fe19ca7c3b0dbcf780bb015d61ea4c386647e2ce39"
+}

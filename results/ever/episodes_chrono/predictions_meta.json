@@ -1,0 +1,13 @@
+{
+  "experiment": "B2",
+  "protocol_sha256": "bf278ba6213dccfc904524d1949b5597053175e31f751c2d081903c3f6e25029",
+  "runner_sha256": "37f36b07879f88f7c2654136e79262bb1d1269e209b6b2adb128bd1e1dfeff4e",
+  "answer_failures": 0,
+  "reused_answers": 14,
+  "row_count": 300,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "7d4375586a3c6651737828a1d4e0c06c822ffcb1ac57a04b989fd13e0305841d"
+}

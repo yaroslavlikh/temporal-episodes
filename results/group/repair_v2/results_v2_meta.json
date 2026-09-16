@@ -1,0 +1,9 @@
+{
+  "predictions_v2_sha256": "20f2c60180a58d37c63f96904896266c8ac5805f83d822d321a34926850c8a96",
+  "row_count": 1490,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "41ae844eabb292f9d0c7edbeed0476981155340ac85c5ef197d2184fcbd0d4a5"
+}
