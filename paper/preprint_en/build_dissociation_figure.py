@@ -1,4 +1,4 @@
-"""Dissociation figure: evidence delivery improves everywhere, accuracy does not follow.
+"""Evidence delivery and accuracy: measured changes, without causal bottleneck claims.
 
 Offline; reads the sealed evidence-endpoint JSON and the published slice table.
 """
@@ -13,7 +13,7 @@ HERE = Path(__file__).resolve().parent
 OUT = HERE / "figures"; OUT.mkdir(exist_ok=True)
 BLUE, GREEN, INK, GRAY = "#315A87", "#16806A", "#182636", "#758190"
 plt.rcParams.update({
-    "font.family": "DejaVu Sans", "font.size": 9.2,
+    "font.family": "DejaVu Sans", "font.size": 10.2,
     "axes.labelcolor": INK, "axes.titlecolor": INK, "text.color": INK,
     "xtick.color": INK, "ytick.color": INK,
     "axes.spines.top": False, "axes.spines.right": False, "pdf.fonttype": 42,
@@ -23,10 +23,10 @@ R = json.load(open("/Users/yaroslavlikh/summary_sov/research/figures/evidence_en
 CAT = R["ever"]["events_precision_by_category"]
 NAME = {"C": "Constraint", "MH": "Multi-hop", "P": "Proactivity", "SH": "Single-hop",
         "Skill": "Skill", "Style": "Style", "TP": "Temporal Dur.", "Title": "Title", "U": "Update"}
-# accuracy RAW -> EVENTS, appendix A of the manuscript
-ACC = {"C": (79.9, 79.1), "MH": (12.9, 13.3), "P": (65.8, 64.6), "SH": (89.7, 89.7),
-       "Skill": (33.7, 32.0), "Style": (30.1, 33.5), "TP": (12.3, 16.3),
-       "Title": (46.4, 45.9), "U": (46.3, 47.0)}
+# Use unrounded per-category accuracy from the read-only editorial verifier.
+verified = json.loads((HERE / "editorial_verification.json").read_text())
+ACC = {c: (100 * row['RAW'], 100 * row['EVENTS'])
+       for c, row in verified['accuracy_by_category'].items()}
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(9.4, 3.9), gridspec_kw={"width_ratios": [1.05, 1]})
 
@@ -40,9 +40,9 @@ for y, (c, v) in zip(ys, items):
     a1.plot([lo, hi], [y, y], color=col, lw=2.1, solid_capstyle="round", alpha=.55)
     a1.plot([v["delta_pp"]], [y], "o", color=col, ms=5.4, zorder=3)
 a1.axvline(0, color=INK, lw=.9, alpha=.55)
-a1.set_yticks(list(ys)); a1.set_yticklabels([f"{NAME[c]}  ($n{{=}}${v['n']})" for c, v in items], fontsize=8.4)
+a1.set_yticks(list(ys)); a1.set_yticklabels([f"{NAME[c]}  ($n{{=}}${v['n']})" for c, v in items], fontsize=9.4)
 a1.set_xlabel("Δ evidence precision, pp  (EVENTS − RAW)")
-a1.set_title("A · Evidence delivery: confirmed everywhere", fontsize=9.6, loc="left", weight="bold")
+a1.set_title("A · Precision gain by category", fontsize=10.4, loc="left", weight="bold")
 a1.margins(y=.06)
 
 # ---- B: dissociation scatter
@@ -54,23 +54,15 @@ for c, v in CAT.items():
                edgecolor=BLUE if not disc else "#B4553F",
                linewidth=1.6 if disc else .6, zorder=3, alpha=.95)
     a2.annotate(NAME[c] + (" *" if disc else ""), (dx, dy), textcoords="offset points",
-                xytext=(6, 4), fontsize=7.7, color=INK)
+                xytext={"C": (-7, -3), "MH": (6, -11)}.get(c, (6, 4)), ha="right" if c == "C" else "left",
+                fontsize=8.8, color=INK)
 a2.axhline(0, color=INK, lw=.9, alpha=.55)
 a2.axvline(0, color=INK, lw=.9, alpha=.3)
 a2.set_xlabel("Δ evidence precision, pp")
 a2.set_ylabel("Δ accuracy, pp")
-a2.set_title("B · It does not carry over into the answer", fontsize=9.6, loc="left", weight="bold")
-a2.text(.98, .10, r"precision: $\rho=+0.63$  ($p=.07$)", transform=a2.transAxes,
-        ha="right", fontsize=8.4, color=GRAY)
-a2.text(.98, .03, r"F1: $\rho=-0.07$   —  neither is significant", transform=a2.transAxes,
-        ha="right", fontsize=8.4, color=GRAY)
-a2.set_xlim(-0.6, 9.6)
+a2.set_title("B · The accuracy gain is heterogeneous", fontsize=10.4, loc="left", weight="bold")
+a2.set_xlim(-3.2, 9.6)
 
-fig.text(.005, -.045,
-         "Left: paired difference over 2,400 questions, question bootstrap 95% CI; in grey, the only category "
-         "whose interval covers zero.\nRight: the same X axis against the shift in accuracy. "
-         "The category with the largest delivery gain (Single-hop) sits at the accuracy ceiling and gains nothing.",
-         fontsize=7.6, color=GRAY, va="top")
 fig.tight_layout()
 fig.savefig(OUT / "dissociation.pdf", bbox_inches="tight", facecolor="white")
 fig.savefig(OUT / "dissociation.png", dpi=220, bbox_inches="tight", facecolor="white")

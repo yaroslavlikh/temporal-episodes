@@ -1,6 +1,6 @@
 """Verify the evidence-delivery endpoint and the registered frontier check, offline.
 
-Recomputes every number the manuscript reports for the dissociation result directly from
+Recomputes every number the manuscript reports for the evidence-delivery result directly from
 the published per-question files in results/. No API calls.
 
     python3 analysis/verify_evidence_endpoint.py
@@ -48,43 +48,13 @@ def boot_ci(x, b=BOOT, seed=SEED):
     return bs[int(0.025 * b)], bs[int(0.975 * b)]
 
 
-def wilcoxon_p(x):
-    """Two-sided Wilcoxon signed-rank with a normal approximation and tie correction."""
-    nz = [v for v in x if abs(v) > 1e-12]
-    if not nz:
-        return 1.0
-    order = sorted(range(len(nz)), key=lambda i: abs(nz[i]))
-    ranks = [0.0] * len(nz)
-    i = 0
-    while i < len(order):
-        j = i
-        while j + 1 < len(order) and abs(abs(nz[order[j + 1]]) - abs(nz[order[i]])) < 1e-12:
-            j += 1
-        avg = (i + j) / 2 + 1
-        for k in range(i, j + 1):
-            ranks[order[k]] = avg
-        i = j + 1
-    w = sum(r for r, v in zip(ranks, nz) if v > 0)
-    n = len(nz)
-    mu = n * (n + 1) / 4
-    sigma = (n * (n + 1) * (2 * n + 1) / 24) ** 0.5
-    if sigma == 0:
-        return 1.0
-    z = (w - mu) / sigma
-    return max(min(2 * 0.5 * (1 - _erf(abs(z) / 2 ** 0.5)), 1.0), 0.0)
-
-
-def _erf(x):
-    import math
-    return math.erf(x)
-
 
 def paired(a: dict, b: dict, field: str) -> dict:
     ks = sorted(set(a) & set(b))
     x = [a[k][field] - b[k][field] for k in ks]
     m = sum(x) / len(x)
     lo, hi = boot_ci(x)
-    return dict(n=len(ks), delta_pp=100 * m, ci=[100 * lo, 100 * hi], p=wilcoxon_p(x),
+    return dict(n=len(ks), delta_pp=100 * m, ci=[100 * lo, 100 * hi],
                 better=sum(1 for v in x if v > 1e-12), worse=sum(1 for v in x if v < -1e-12))
 
 
@@ -167,6 +137,27 @@ if not res["ever"]["pareto"]["events_never_more_sources"]:
     failures.append("events delivered more sources than raw on at least one question")
 print(f"  {'ok ' if res['ever']['pareto']['events_never_more_sources'] else 'FAIL'} "
       f"events never deliver more sources than raw")
+
+# per-project sensitivity and leave-one-project-out (manuscript appendix D)
+proj = collections.defaultdict(list)
+for k in sorted(set(EVE) & set(RAW)):
+    proj[EVE[k]["topic"]].append(EVE[k]["evidence_precision"] - RAW[k]["evidence_precision"])
+res["ever"]["events_precision_by_project"] = {t: 100 * statistics.mean(v) for t, v in sorted(proj.items())}
+print("per-project evidence precision, events - raw")
+for t, want in (("01", 2.50), ("02", 3.45), ("03", 3.22), ("04", 3.61), ("05", 3.28)):
+    check(f"project {t}", res["ever"]["events_precision_by_project"][t], want)
+lopo = [100 * statistics.mean([d for u, v in proj.items() if u != t for d in v]) for t in proj]
+res["ever"]["leave_one_project_out"] = [min(lopo), max(lopo)]
+check("leave-one-project-out minimum", min(lopo), 3.11)
+check("leave-one-project-out maximum", max(lopo), 3.39)
+
+# correct verdicts with zero delivered gold anchors
+zero = {arm: sum(1 for r in D.values() if r["correct"] == 1 and r["evidence_recall"] == 0)
+        for arm, D in (("raw", RAW), ("events", EVE), ("episodes", EPI))}
+res["ever"]["correct_with_zero_gold"] = zero
+check("correct with zero gold, raw", zero["raw"], 316, tol=0.5)
+check("correct with zero gold, events", zero["events"], 312, tol=0.5)
+check("correct with zero gold, episodes", zero["episodes"], 305, tol=0.5)
 
 # -------------------------------------------------------------- SocialMemBench
 print("SocialMemBench, 1,031 questions, paired against RAW")

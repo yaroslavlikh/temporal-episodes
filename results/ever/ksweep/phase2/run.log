@@ -1,0 +1,7 @@
+[2026-09-17 15:06:12] manifest frozen before calls: n=304, sample sha256 5cd39e39666e6075
+[2026-09-17 15:06:15] answers: 608 pending / 0 done; spent 0.0000
+[2026-09-17 15:08:13] answers: finished; spent 0.7561; stopped=False
+[2026-09-17 15:08:13] judge: 608 pending / 0 done; spent 0.7561
+[2026-09-17 15:08:30] judge: finished; spent 0.7947; stopped=False
+[2026-09-17 15:08:30] phase 2 complete
+[2026-09-17 15:09:50] phase 2 complete

@@ -1,0 +1,12 @@
+{
+  "phase": 2,
+  "k": 20,
+  "manifest_sha256": "7eca25b3688b4686efbefa097e40e3594b560d1f75811b38d9abf012e839aaa2",
+  "answer_failures": 0,
+  "row_count": 608,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "0186fac01f8de11520b27cabc6af8276f4faadb2365fc1f5bb91162b4274b31f"
+}

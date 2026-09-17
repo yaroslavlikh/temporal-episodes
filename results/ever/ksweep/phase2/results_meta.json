@@ -1,0 +1,12 @@
+{
+  "phase": 2,
+  "k": 20,
+  "judge_call": "official_evaluator_no_max_tokens_v1",
+  "predictions_sha256": "0186fac01f8de11520b27cabc6af8276f4faadb2365fc1f5bb91162b4274b31f",
+  "row_count": 608,
+  "identity_fields": [
+    "qa_key",
+    "condition"
+  ],
+  "sha256": "5cef32b13456338f870f335ef6caac4556261339be6ea7219774889ae01261f2"
+}

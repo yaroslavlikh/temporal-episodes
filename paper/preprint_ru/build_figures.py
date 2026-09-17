@@ -36,7 +36,22 @@ plt.rcParams.update({
 })
 
 
+_DECIMAL = __import__("re").compile(r"(?<![\w.\-])(\d+)\.(\d+)")
+
+
+def russian_decimals(fig) -> None:
+    """Russian decimal comma in every static label; leading-dot p values and names like GPT-4.1 stay as they are."""
+    from matplotlib.text import Text
+    for text in fig.findobj(Text):
+        value = text.get_text()
+        if value:
+            fixed = _DECIMAL.sub(r"\1{,}\2" if "$" in value else r"\1,\2", value)
+            if fixed != value:
+                text.set_text(fixed)
+
+
 def save(fig: plt.Figure, name: str) -> None:
+    russian_decimals(fig)
     fig.savefig(OUT / f"{name}.pdf", bbox_inches="tight", facecolor="white")
     fig.savefig(OUT / f"{name}.png", dpi=220, bbox_inches="tight", facecolor="white")
     plt.close(fig)
@@ -65,10 +80,10 @@ def arrow(ax, start, end, *, color=GRAY, label=None, curve=0.0, ls="-"):
 # Figure 1: motivation / teaser.
 fig, ax = plt.subplots(figsize=(10.5, 3.4))
 ax.set(xlim=(0, 10.5), ylim=(0, 3.4)); ax.axis("off")
-ax.text(.15, 3.12, "ПОЧЕМУ СЫРЫХ СООБЩЕНИЙ НЕДОСТАТОЧНО", fontsize=10.5,
+ax.text(.15, 3.12, "ПОИСКОВАЯ АБСТРАКЦИЯ И ПРОВЕРЯЕМЫЙ ИСТОЧНИК", fontsize=10.5,
         color=BLUE, weight="bold")
 rounded(ax, (.15, 1.72), 2.45, .92, "День 1 · Алексей\n«Я буду на встрече»", fc="#F4F6F8", ec=GRAY)
-rounded(ax, (3.05, 1.72), 2.45, .92, "День 18 · Алексей\n«Уезжаю из города»", fc="#F4F6F8", ec=GRAY)
+rounded(ax, (3.05, 1.72), 2.45, .92, "День 18 · Алексей\n«Уезжаю; на встречу\nне приду»", fc="#F4F6F8", ec=GRAY)
 rounded(ax, (7.48, 1.72), 2.75, .92, "Поздний вопрос\n«Будет ли Алексей?»", fc=MINT, ec=GREEN, weight="bold")
 arrow(ax, (2.6, 2.18), (3.05, 2.18)); arrow(ax, (5.5, 2.18), (7.48, 2.18), label="лексический разрыв", curve=-.08)
 rounded(ax, (1.2, .28), 3.2, .76, "СОБЫТИЕ ДЛЯ ПОИСКА\nплан участия → отменён отъездом", fc=PALE_BLUE, ec=BLUE)
@@ -79,52 +94,63 @@ ax.text(.15, .02, "Derived-текст помогает найти смысл; ra
 save(fig, "concept")
 
 
-# Figure 2: complete architecture, arranged as three non-crossing lanes.
-fig, ax = plt.subplots(figsize=(10.7, 6.15))
-ax.set(xlim=(0, 10.7), ylim=(0, 6.15)); ax.axis("off")
-ax.text(.15, 5.88, "A · QUERY-INDEPENDENT INGESTION", fontsize=10.4, color=BLUE, weight="bold")
-xs = [.15, 2.25, 4.35, 6.45, 8.55]
-texts = ["Raw turns\nID · speaker · time", "Bounded sessions\nby day / group", "Forced extraction\n0–2 events per turn", "Span validation\nID + literal quote", "Immutable events\nindex text + evidence"]
-for i, (x, t) in enumerate(zip(xs, texts)):
-    rounded(ax, (x, 4.85), 1.75, .72, t, fc="#F4F6F8" if i == 0 else PALE_BLUE, ec=GRAY if i == 0 else BLUE, fs=8.5)
-for i in range(4): arrow(ax, (xs[i]+1.75,5.21), (xs[i+1],5.21))
+# Figure 2: ingestion, reverse linking lane, retrieval, explicit index branches.
+fig, ax = plt.subplots(figsize=(10.7, 7.0))
+ax.set(xlim=(0, 10.7), ylim=(0, 7)); ax.axis("off")
+GOLD = "#A57935"
+ax.text(.15, 6.72, "A · ПОСТРОЕНИЕ ПАМЯТИ ДО ЧТЕНИЯ ВОПРОСОВ", fontsize=10.2, color=BLUE, weight="bold")
+xs = [.15, 2.8, 5.45, 8.1]
+texts = ["Raw store\nID · автор · время · текст", "Сессия → извлечение\n0–2 события на реплику",
+         "Валидация evidence\nID + дословная цитата", "Неизменяемые события\nописание + source pointers"]
+for x, text in zip(xs, texts):
+    rounded(ax, (x, 5.77), 2.3, .7, text, fs=8.4, fc="#F4F6F8" if x == xs[0] else PALE_BLUE)
+for i in range(3):
+    arrow(ax, (xs[i]+2.3, 6.12), (xs[i+1], 6.12))
+ax.text(.15, 5.40, "B · ОПЦИОНАЛЬНОЕ СВЯЗЫВАНИЕ · ОБРАБОТКА ПО ВРЕМЕНИ", fontsize=10.2, color=GOLD, weight="bold")
+texts = ["Эпизод: append-only\nhot: последние 5 событий\ncold: все source pointers",
+         "LLM resolver\nNEW / REVISE /\nREAFFIRM / AUGMENT",
+         "Поиск эпизодов · top-k = 3\n0,6 · hot + 0,4 · last\nфильтр: conversation network",
+         "Новое событие\nлокальный MiniLM\nembedding"]
+for x, text in zip(xs, texts):
+    rounded(ax, (x, 4.27), 2.3, .82, text, fc="#FBF8F2", ec=GOLD, fs=7.8)
+arrow(ax, (9.25, 5.77), (9.25, 5.09), color=GOLD)
+for i in (3, 2, 1):
+    arrow(ax, (xs[i], 4.68), (xs[i-1]+2.3, 4.68), color=GOLD)
+ax.text(3.94, 4.01, "пустой пул / невалидный выбор / confidence < 0,5 → NEW", fontsize=7.8, color=GOLD, ha="center")
 
-ax.text(.15, 4.48, "B · OPTIONAL TEMPORAL LINKING", fontsize=10.4, color="#A57935", weight="bold")
-rounded(ax, (.15, 3.47), 2.25, .72, "New event\nembedding", fc="#FBF8F2", ec="#A57935", fs=8.5)
-rounded(ax, (2.83, 3.47), 2.25, .72, "Candidate retrieval\nsemantic top-k = 3", fc="#FBF8F2", ec="#A57935", fs=8.5)
-rounded(ax, (5.51, 3.47), 2.25, .72, "LLM resolver\nNEW · REVISE · REAFFIRM · AUGMENT", fc="#FBF8F2", ec="#A57935", fs=6.9)
-rounded(ax, (8.19, 3.47), 2.25, .72, "Episode view\nhot = last 5 · cold = all evidence", fc="#FBF8F2", ec="#A57935", fs=7.4)
-for a,b in [((2.40,3.83),(2.83,3.83)),((5.08,3.83),(5.51,3.83)),((7.76,3.83),(8.19,3.83))]: arrow(ax,a,b,color="#A57935")
-arrow(ax,(9.42,4.85),(9.42,4.19),color="#A57935",ls=":")
+ax.text(.15, 3.61, "C · ОБЩИЙ ИНДЕКС И ВОЗВРАТ К ПЕРВИЧНЫМ СООБЩЕНИЯМ", fontsize=10.2, color=GREEN, weight="bold")
+rounded(ax, (.15, 2.62), 2.3, .65, "RAW index\nисходный текст", fc="#F4F6F8", ec=GRAY, fs=8.2)
+rounded(ax, (2.8, 2.62), 2.3, .65, "EVENTS index\nсамостоятельное описание", fs=8.2)
+rounded(ax, (5.45, 2.62), 2.3, .65, "EPISODES index\nописание hot-view", fc="#FBF8F2", ec=GOLD, fs=8.2)
+ax.text(8.24, 2.96, "Выбор условия:\nRAW / RAW+EVENTS /\nRAW+EPISODES", fontsize=8.1, ha="left", va="center", color=GRAY)
 
-ax.text(.15, 3.05, "C · UNIFIED RETRIEVAL + PROVENANCE EXPANSION", fontsize=10.4, color=GREEN, weight="bold")
-rounded(ax, (.15, 1.93), 1.55, .76, "Question\nembedding", fc=MINT, ec=GREEN, fs=8.6)
-rounded(ax, (2.02, 1.93), 2.18, .76, "One ranked pool\nRAW + EVENTS / EPISODES", fc=MINT, ec=GREEN, fs=7.3, weight="bold")
-rounded(ax, (4.52, 1.93), 1.55, .76, "Cosine\ntop-k = 10", fc=MINT, ec=GREEN, fs=8.6)
-rounded(ax, (6.39, 1.93), 1.78, .76, "Expand derived hits\n→ unique raw IDs", fc=MINT, ec=GREEN, fs=8.2)
-rounded(ax, (8.49, 1.93), 1.95, .76, "Generator context\nderived + dated evidence", fc=MINT, ec=GREEN, fs=8.2)
-for a,b in [((1.70,2.31),(2.02,2.31)),((4.20,2.31),(4.52,2.31)),((6.07,2.31),(6.39,2.31)),((8.17,2.31),(8.49,2.31))]: arrow(ax,a,b,color=GREEN)
-
-rounded(ax, (.15, .62), 2.48, .60, "Append-only raw store\noriginal text never replaced", fc="#F4F6F8", ec=GRAY, fs=8.2)
-rounded(ax, (3.22, .62), 2.48, .60, "Event index\nsearchable semantic abstraction", fc=PALE_BLUE, ec=BLUE, fs=8.2)
-rounded(ax, (6.29, .62), 4.15, .60, "Returned evidence\nsource ID · speaker · timestamp · literal quote", fc=MINT, ec=GREEN, fs=8.2)
-arrow(ax,(1.40,1.22),(2.35,1.93),color=GRAY,ls=":",curve=-.12)
-arrow(ax,(4.46,1.22),(3.92,1.93),color=BLUE,ls=":",curve=.10)
-arrow(ax,(7.29,1.93),(7.29,1.22),color=GREEN,ls=":")
-ax.text(.15, .20, "ИНВАРИАНТ · derived representation помогает найти смысл; raw evidence остаётся адресуемым и неизменным.", fontsize=9.1, color=INK, weight="bold")
+rounded(ax, (.15, 1.30), 2.3, .73, "Вопрос → embedding\nbenchmark adapter", fc=MINT, ec=GREEN, fs=8.4)
+rounded(ax, (2.8, 1.30), 2.3, .73, "Единый ranked pool\ncosine · top-k = 10", fc=MINT, ec=GREEN, fs=8.4, weight="bold")
+rounded(ax, (5.45, 1.30), 2.3, .73, "Provenance expansion\nderived hit → raw sources\nдедупликация source IDs", fc=MINT, ec=GREEN, fs=8.0)
+rounded(ax, (8.1, 1.30), 2.3, .73, "Контекст генератора\nderived + источники\nавтор · время · текст", fc=MINT, ec=GREEN, fs=8.0)
+for i in range(3):
+    arrow(ax, (xs[i]+2.3, 1.665), (xs[i+1], 1.665), color=GREEN)
+arrow(ax, (1.30, 2.62), (3.04, 2.03), color=GRAY, ls=":")
+arrow(ax, (3.95, 2.62), (3.95, 2.03), color=BLUE, ls=":")
+arrow(ax, (6.60, 2.62), (4.83, 2.03), color=GOLD, ls=":")
+# Evidence is read from the preserved original store, not from rewritten descriptions.
+ax.plot([.15, .04, .04, 6.6, 6.6], [6.12, 6.12, .76, .76, 1.25], color=GRAY, ls=":", lw=.9)
+arrow(ax, (6.6, 1.05), (6.6, 1.30), color=GRAY, ls=":")
+ax.text(3.7, .48, "Raw store → исходные сообщения по неизменяемым адресам", fontsize=8.1, color=GRAY, ha="center")
+ax.text(.15, .09, "ИНВАРИАНТ · описание может меняться; первичная история и адрес свидетельства сохраняются.", fontsize=9.1, color=INK, weight="bold")
 save(fig, "architecture")
 
 
 # Figure 3: EverMemBench system-level comparison (reported rows).
-systems = ["Temporal Episodes\n(ours)", "RAW (ours)", "MemOS", "Zep", "Full Context", "Mem0", "MemoBase"]
+systems = ["EPISODES (ours)", "RAW (ours)", "MemOS", "Zep", "Full Context", "Mem0", "MemoBase"]
 scores = [47.16, 46.34, 42.55, 39.97, 37.44, 37.09, 34.27]
 colors = [GREEN, BLUE] + [GRAY] * 5
 fig, ax = plt.subplots(figsize=(10.4, 4.3)); y = np.arange(len(systems))
 ax.barh(y, scores, color=colors, height=.62)
 for i, value in enumerate(scores): ax.text(value + .35, i, f"{value:.2f}%", va="center", weight="bold" if i < 2 else "normal")
-ax.set(yticks=y, yticklabels=systems, xlim=(30, 50), xlabel="Macro accuracy по 9 типам вопросов, %")
+ax.set(yticks=y, yticklabels=systems, xlim=(0, 52), xlabel="Macro accuracy по 9 типам вопросов, %")
 ax.invert_yaxis(); ax.grid(axis="x", color=LIGHT, linewidth=.8); ax.set_axisbelow(True)
-ax.set_title("EverMemBench · полная система в официальном evaluation harness", loc="left", weight="bold")
+ax.set_title("EverMemBench · наши adapter results и опубликованные системы", loc="left", weight="bold")
 fig.subplots_adjust(left=.22, bottom=.14, right=.94, top=.88); save(fig, "ever_leaderboard")
 
 
@@ -135,7 +161,7 @@ fig, axes = plt.subplots(1, 2, figsize=(10.7, 4.35), gridspec_kw={"width_ratios"
 y = np.arange(len(labels)); bar_colors = [GRAY, "#8E77A8", GRAY, BLUE, "#8E77A8", GREEN, GREEN, "#A57935", "#A57935"]
 axes[0].barh(y, accuracy, color=bar_colors, height=.61)
 for i, v in enumerate(accuracy): axes[0].text(v + .25, i, f"{v:.1f}", va="center", fontsize=8.6)
-axes[0].set(yticks=y, yticklabels=labels, xlim=(8, 22), xlabel="Accuracy, %"); axes[0].invert_yaxis(); axes[0].grid(axis="x", color=LIGHT); axes[0].set_axisbelow(True)
+axes[0].set(yticks=y, yticklabels=labels, xlim=(0, 23), xlabel="Accuracy, %"); axes[0].invert_yaxis(); axes[0].grid(axis="x", color=LIGHT); axes[0].set_axisbelow(True)
 axes[0].set_title("A · Temporal Duration (n = 300)", loc="left", weight="bold")
 names = ["EVENTS chrono − RAW chrono", "EVENTS chrono − HyDE chrono", "EPISODES chrono − RAW chrono", "EPISODES chrono − EVENTS chrono"]
 deltas = [5.33, 5.33, 4.33, -1.00]; intervals = [(0.67, 10.00), (0.33, 10.33), (0.00, 9.00), (-5.00, 3.33)]
@@ -162,22 +188,22 @@ ax.axvline(0, color=INK, ls="--", lw=.8)
 ax.set(yticks=np.arange(len(rows)), yticklabels=[r[0] for r in rows], xlim=(-10.5, 4.5),
        xlabel="Парная разница RAW+EPISODES − RAW, п.п. (95% ДИ)")
 ax.invert_yaxis(); ax.grid(axis="x", color=LIGHT); ax.set_axisbelow(True)
-ax.set_title("Перенос неоднороден, и ни один интервал не исключает ноль", loc="left", weight="bold")
-ax.text(.02, -0.30, "Каждая строка — парное сравнение внутри своего бенчмарка; метрика (accuracy / MeanQ) и модели различаются, поэтому строки не сопоставимы между собой по уровню.", transform=ax.transAxes, fontsize=8.0, color=GRAY)
+ax.set_title("Добавочный эффект эпизодов: перенос между бенчмарками", loc="left", weight="bold")
+ax.text(.02, -0.30, "Парные сравнения внутри каждого набора. Модели и метрики различаются;\nстроки показывают добавочный эффект, а не абсолютный уровень систем.", transform=ax.transAxes, fontsize=8.0, color=GRAY)
 fig.subplots_adjust(bottom=.28, left=.30, right=.97, top=.88); save(fig, "transfer")
 
 
 # Figure 6: GroupMemBench quality/cost/storage trade-off on common 606 QA.
-names = ["Hindsight", "HippoRAG", "A-Mem", "Mem0", "GraphRAG", "MemGPT", "RAW (ours)", "Episodes (ours)"]
+names = ["Hindsight", "HippoRAG", "A-Mem", "Mem0", "GraphRAG", "MemGPT", "RAW (ours)", "EPISODES (ours)"]
 acc = np.array([40.4, 33.3, 29.2, 15.5, 12.2, 19.1, 34.7, 32.3]); cost = np.array([32.10, 8.64, 26.13, 18.41, 12.51, .43, .23, 1.92]); storage = np.array([4.25, 5.76, 6.60, .99, 3.00, .69, .37, .41])
 fig, ax = plt.subplots(figsize=(10.4, 4.65)); ours = np.array([False]*6 + [True, True]); size = 90 + storage * 55
 ax.scatter(cost[~ours], acc[~ours], s=size[~ours], color=GRAY, alpha=.72, edgecolor="white", linewidth=.8); ax.scatter(cost[ours], acc[ours], s=size[ours], color=[BLUE, GREEN], alpha=.95, edgecolor="white", linewidth=1)
-offsets = {"Hindsight":(-2.8,1.1),"HippoRAG":(-1.5,-2.1),"A-Mem":(-1.5,1.1),"Mem0":(-1.0,1.0),"GraphRAG":(-1.8,-2.0),"MemGPT":(-.3,1.2),"RAW (ours)":(.5,1.1),"Episodes (ours)":(.7,-2.0)}
+offsets = {"Hindsight":(-5.2,-.4),"HippoRAG":(-1.6,2.2),"A-Mem":(-4.3,-.4),"Mem0":(-1.0,1.0),"GraphRAG":(-1.8,-2.0),"MemGPT":(-.3,1.2),"RAW (ours)":(.5,1.1),"EPISODES (ours)":(.4,-2.6)}
 for n, xx, yy in zip(names, cost, acc):
-    dx, dy = offsets[n]; ax.text(xx+dx, yy+dy, n, fontsize=8.3, weight="bold" if "ours" in n else "normal")
-ax.set(xlabel="Ingestion cost, USD per domain", ylabel="Accuracy on common 606 QA, %", xlim=(-1.2,35.5), ylim=(7,45)); ax.grid(color=LIGHT); ax.set_axisbelow(True)
+    dx, dy = offsets[n]; ax.text(xx+dx, yy+dy, n, fontsize=9.4, weight="bold" if "ours" in n else "normal")
+ax.set(xlabel="Стоимость построения памяти, $ за домен", ylabel="Accuracy на 606 QA без abstention, %", xlim=(-1.2,35.5), ylim=(7,45)); ax.grid(color=LIGHT); ax.set_axisbelow(True)
 ax.set_title("GroupMemBench · качество, цена построения и объём хранилища", loc="left", weight="bold")
-ax.text(.02,.02,"Размер точки ∝ reported storage. Сравнение описательное: harness и модели систем различаются.", transform=ax.transAxes, fontsize=8.4, color=GRAY)
+ax.text(.02,.02,"Размер точки ∝ reported storage. Сравнение описательное: harness и модели систем различаются.", transform=ax.transAxes, fontsize=9.2, color=GRAY)
 save(fig, "efficiency")
 
 

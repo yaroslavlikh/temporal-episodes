@@ -1,0 +1,111 @@
+{
+  "experiment": "ksweep_v1",
+  "phase": 1,
+  "created_msk": "20260917_144836",
+  "git": {
+    "head": "5eb8d4eda8705273ab86fd5b8442036dec59a310",
+    "research_uncommitted_entries": 53,
+    "note": "HEAD does not contain every script used; see dependencies_sha256"
+  },
+  "config": {
+    "ks": [
+      10,
+      20,
+      40
+    ],
+    "conditions": [
+      "RAW",
+      "RAW+EVENTS"
+    ],
+    "bootstrap": 10000,
+    "seed": 20260917,
+    "ci": "percentile 2.5/97.5, paired question bootstrap; one index draw per group, reused across k and metrics; groups drawn in order: all, projects, categories by name",
+    "token_encoding": "o200k_base",
+    "embedding_model": "text-embedding-3-large",
+    "precision_empty_exposed": 0.0,
+    "api_calls": 0
+  },
+  "versions": {
+    "python": "3.13.4",
+    "numpy": "2.3.0",
+    "tiktoken": "0.12.0"
+  },
+  "dependencies_sha256": {
+    "ksweep_delivery.py": "2bc0df65bdad2b0243ae7d43d4e3d97342e6bb8db9381962791bfb604ad12f53",
+    "final_sprint_evermembench.py": "ad8cfb90f5c818d973a9a4e4f28b5641c341f04641e59a16c3ead00a8c03a3fd",
+    "evermembench_temporal_budget_control.py": "522ad5416c2566139ba4647cf19d288a62e2511bd99d22382348ebe7447c31c6",
+    "evermembench_episode_run.py": "2839109d6e06409e58f201f55541d4b4b95ec0ffd31ce89446c76008c08010ef",
+    "evermembench_unlinked_events_control.py": "df0b02827fedd40487bef66eaa659fc81f81a5659f3717ad5e799c756df0746b",
+    "paper_benchmark_common.py": "f95186374dfdca67b3544a48d050fae49a0a8799db035519b2b446f263d37c97",
+    "evermembench_parallel_resume.py": "fc438611c63586f1267bf748d6ce3ed7a1cf65bea1ec0956aa01493268415d76",
+    "evermembench_chronological_order_control.py": "3378d1904cce3f84a0547b4f98263359ce38ef662c17ddf92e8c41a8848a5503"
+  },
+  "frozen_sha256sums": {
+    "evermembench_temporal_episodes_official_v1_20260915_021550_MSK": "9dae482ef6e984b119dc76ed5a4fa214d5f5f643a1a68e0cde4b70ce712cf37f",
+    "evermembench_temporal_budget_control_v1_20260915_021134_MSK": "cd90231d87962d2ca152495cf7510fb9fb52c9a1164f66799b96825bbb4b7089",
+    "evermembench_unlinked_events_control_v1_20260915_022532_MSK": "ca9a75a4b2b30ad731bc8492b7c0e537f42d549ddd5bb1d39f47a09ca8ceb7fe",
+    "evermembench_chronological_order_control_v2_20260915_190741_MSK": "c83d8c168b7fe06b79a7c4336f4feda3aae813f059a3821baebc30cc63cefb02",
+    "final_sprint_A_events_full_v1_20260915_233142_MSK": "38e0145041bf922a424b5b7127636a11db14d63e70258763621a9ac8105fd695"
+  },
+  "frozen_checks": {
+    "frozen_sha256sums_verified": {
+      "evermembench_temporal_episodes_official_v1_20260915_021550_MSK": 573,
+      "evermembench_temporal_budget_control_v1_20260915_021134_MSK": 31,
+      "evermembench_unlinked_events_control_v1_20260915_022532_MSK": 170,
+      "evermembench_chronological_order_control_v2_20260915_190741_MSK": 36
+    },
+    "cache_entries_available": 8467
+  },
+  "event_index_meta_sha256": "7c560190ff465b49e0433bfe79836e7ffa6e3b4b6924ca0e88e25d2ebd1f48f1",
+  "vector_files_sha256": {
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-da99c1005121425bd38f011a.npy": "35e38ace7999783734d3a6d73eaca7b423c80c7f31d96c10ed9ca6c30e0f5b80",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-2545d80e0e4fbf5b52f7b8ee.npy": "65c49f21e7c33280009b3ff665ce45e7fd45656c4f5d781e2441770a4ddc5293",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-20b7a28193fcb11dafcc9d70.npy": "56ecbe87fd349e84599f6a4f5a7f89f65638c54186956222ba580e67809e5b87",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-597abb0a39533bbf19601bfa.npy": "4bbdafb0c0f0faea233ce391b58f9b48a45f903bec8764f83b2c2d385ce68372",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/index-01-raw-499b8a4fe0f7f50ab622.npy": "65aa7725f42e2e2d04025d9e63dcf18b53734344afb8a9733393f271b039e575",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-71bebaacec5ca40134688dc6.npy": "9a003171a0de29a7227efb78e36c722e2685fe18d6b5b5f5d1f0f759148b03de",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-cdd05365507b79e82b827223.npy": "7a3edc6d703b9c62e26190261d1f0c7d474eb552f3cc25d0b685d50263f5f334",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-ca4b3d1dad8d90c5e41172e3.npy": "f25d7fa6d09a542442b344fc9e1b990670bb18fcabe56cd4ba9d2011918d1aa1",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-69c4de5e6665949da88de8ca.npy": "e973d160ec978d7c99f74aafed4dda09f79598fbf12f1959a16dcec874315203",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/index-02-raw-7a8cb8967cc8bc00bebf.npy": "24c4d199571eb2f02794497caa4a31a2dcc629d495cd70265786bb0b647c9c1e",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-b846800572049fedeaa1e7e9.npy": "df8e39c0e6ddaf6d946b6194616e177ef225bba507727301444632ef8bcacd3e",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-539ac19e395cc76509798b57.npy": "aa7bd1d429675baa2d8fa685f2f72b3308da3fffccaaf885b19b91ffe65bf6ac",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-4b3998eb4d433308feaabc12.npy": "fc54401731f08d69359e2eb3a83f81bc8b1122a43a2581c725611766c69892e8",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-f939627cdbdf92591c01209e.npy": "2b807c6c18261d14085f90b27a776d365d56d0d0cd9c0a634bbf9c70d53e8021",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/index-03-raw-ab74ab6c99715a99c03e.npy": "eb3b26140a4df9fcd89939b5f3de39d0a7f979855c4fb825375a75dcb675e9ab",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-a8f9aced424e142919718ab8.npy": "94f905c15ed5b9f07d88750b3b12eef2c530dae58801d2d1ea590e6230106247",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-47bc386592d095154820eb18.npy": "263d1e7c3ce0cd163e6b4b1cb48130718937b2e980dcdd5109dd9e1a0d8b97a6",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-39a227f5c154c123b003caa6.npy": "21bc9513f9cd464c50bf8ce38b156414b4d953a1c2763eb1b345f803944c1bd0",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-57b8272592105b39170a27ca.npy": "26fbea413a7645422ee19de698a31fd195e1f096bd6809fa4c82fa9de1c2a9a9",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/index-04-raw-ac175e78a4fee17e8384.npy": "699acebd6194b2da723955746936c795fa7f8026a47877e73024390363d12ea6",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-b421244edbf8e4b1afe65932.npy": "44d33299d4ae6c47963b294bc60a02b0d2c658dc5ce15be9f1350f001495ffcf",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-9b2419a297768d2c15a25fac.npy": "7fb5671cc1f9447cd6aa54dfa10125e1e04cbce6adf065a75243014eb9c61a89",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-eda7df6d96e6fd8fd3758195.npy": "7f67eb983c4146ac886bcc84aeeb8dde403fc0debbce1c51b380b5c4cc1935b5",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/batch-98c557a680d4fe8b3a250ce6.npy": "613a663209877246781658eccb3ad8fa9dabf538dec6e0a297df76fa485281cf",
+    ".research_runs/frozen/evermembench_temporal_episodes_official_v1_20260915_021550_MSK/run/embeddings/index-05-raw-187385008e84f6d8298c.npy": "89a714e8a7d3357004c9de7a884f24135811732d912ba900f7e06604aaadc80e",
+    ".research_runs/frozen/evermembench_unlinked_events_control_v1_20260915_022532_MSK/related/evermembench_unlinked_events_index_v1/events-01-d54e4f1db378f193dad9.npy": "4f6c7bb25b5de1675733d645fcf39480bb1bf494c2c9f1cc241653d1d5293236",
+    ".research_runs/frozen/evermembench_unlinked_events_control_v1_20260915_022532_MSK/related/evermembench_unlinked_events_index_v1/events-02-c8e9c369203458e91d4b.npy": "7f9813e7258ba634f5e9946c7ab6591600402f06d3d822f8af0a3d7969ddb528",
+    ".research_runs/frozen/evermembench_unlinked_events_control_v1_20260915_022532_MSK/related/evermembench_unlinked_events_index_v1/events-03-667524525cace4ebd3f8.npy": "4fad011c214a8ab7434b51ffbf29702dd1d4f9ace5edb8430c53b4f73467c705",
+    ".research_runs/frozen/evermembench_unlinked_events_control_v1_20260915_022532_MSK/related/evermembench_unlinked_events_index_v1/events-04-3de738604ec42785053a.npy": "28357bd8271345324ce764bf994e6fc614d76d52dc51e6820a34adb66bd83814",
+    ".research_runs/frozen/evermembench_unlinked_events_control_v1_20260915_022532_MSK/related/evermembench_unlinked_events_index_v1/events-05-78fdf0f6da33137527ee.npy": "b4168eeeefde54e497280cb0e17f09d4d2dad6f0336b8f8b4ca05c473011c1d1"
+  },
+  "official_inputs_sha256": {
+    ".research_runs/official_sources/EverMemBench/eval/config/prompts.yaml": "b1259f6ebb93ba5c56b558414a0f0fa04f36cee7801a9cdd009f2e9706011542",
+    ".research_runs/official_sources/EverMemBench-Dynamic/01/qa_01.json": "358e22d138e24c5e655fc2c09e7f63e22e25603a065d65c946ab30ed57884d3c",
+    ".research_runs/official_sources/EverMemBench-Dynamic/01/dialogue.json": "16e4fc66c47eb742cc75097ab5ea6d95e1fae8963841391e58a8e4ec35ace2dc",
+    ".research_runs/official_sources/EverMemBench-Dynamic/02/qa_02.json": "46ac2dbe2e88b0752f9777feae4c430b033137dd84f1fe1bd749338dc4b1b446",
+    ".research_runs/official_sources/EverMemBench-Dynamic/02/dialogue.json": "37008035d1f7804a12079e4475f612a2b194b3c1c321c7a674e50d8ee57f4e0f",
+    ".research_runs/official_sources/EverMemBench-Dynamic/03/qa_03.json": "81b35a8349bdbfb0f5232dfb00a48779170f3eaa2b499ad5b09de5704c19d9e7",
+    ".research_runs/official_sources/EverMemBench-Dynamic/03/dialogue.json": "eeb18a989e6b4f59ae23d91fcc69d8ddbee8c917793c81ae623ecee9388dc8b5",
+    ".research_runs/official_sources/EverMemBench-Dynamic/04/qa_04.json": "47579156659cdedab6419d5ffa2f3030ca2a917bd3c3f134eaf16db318769797",
+    ".research_runs/official_sources/EverMemBench-Dynamic/04/dialogue.json": "3870ce44dfef56cebdc0236c19825eb0c5ea84e028b466e9f9fdb59349cbd56c",
+    ".research_runs/official_sources/EverMemBench-Dynamic/05/qa_05.json": "2e5038135dcc6f8ae98b3bcbf956f0d03f9086335436c84504552a2124910d2b",
+    ".research_runs/official_sources/EverMemBench-Dynamic/05/dialogue.json": "0434cd414d01ed4fb22e37c016ee647c3d0ea5e94fe1edf7d72dcf4ae42158e8"
+  },
+  "sanity_k10_sha256": "1fbee268dc7ed55f07b0d8cd849a8cc4ac900da2f25d566490b16850ab16740c",
+  "outputs_sha256": {
+    "per_question.jsonl": "d57953d394c77186e892571070d19c31405b5545ac0a03139de7e3208fe3ddf4",
+    "summary.json": "39102cd663188050fd2b61f216a6c64d0db8c8ff14762a46cd1b4871af4a49af",
+    "report_phase1.md": "0f7c3ed96f66cdb15943401a8715290f22ace30b6d4c94355313826dbb6be5f8"
+  }
+}

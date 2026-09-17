@@ -48,7 +48,7 @@ quote validator (`protocols/amendments/groupmembench_namespace_fix_20260912/`).
 
 Primary endpoint: RAW 0.340 vs RAW+EPISODES 0.300; paired delta −0.040, 95% CI
 [−0.093, +0.013]; McNemar p = 0.238. All 745 questions: −0.017 [−0.043, +0.007].
-Measurement defect found after scoring: 101 of 1,490 gpt-5 answers were empty because hidden
+Measurement defect found after scoring: 102 of 1,490 gpt-5 answers were empty because hidden
 reasoning exhausted the 2,048-token completion cap (RAW 44, RAW+EPISODES 58); empty answers
 were scored incorrect. Post-hoc sensitivity excluding pairs with an empty answer: primary
 −0.024 [−0.081, +0.024] (not recomputed by the public verifier; per-question data are not
@@ -114,7 +114,7 @@ are not treated as distinguishable. `results/ever/chronological_order_control/`.
 The event condition extended from the 300-question slice to all 2,400 questions, over the
 same sealed memory. Accuracy 49.83% versus raw 49.46% (+0.38 pp, [−0.8, +1.6], p = .589):
 no average gain. This run is also the source of the per-question evidence metrics used for
-the dissociation result. `results/ever/events_full/`.
+the evidence-delivery result. `results/ever/events_full/`.
 
 ## 12. HyDE control and its token-matched amendment — 2026-09-16
 
@@ -124,8 +124,9 @@ written because the registered comparison mixed two confounds — 2,456 versus ~
 tokens and chronological versus ranked order — that the budget and order controls exist to
 remove. Experiment C (HyDE at top-10) was left untouched; C2 adds a token- and order-matched
 HyDE arm built from C's sealed generations. Accuracy: HyDE 14.0%, raw 14.0%, events 19.3%.
-Query-side expansion buys recall (+1.61 pp over matched raw) and no precision; events buy
-both, and deliver +6.68 pp denser evidence than HyDE at indistinguishable recall.
+Over matched raw, query-side expansion raises recall by +1.61 pp and precision by +1.18 pp. At a
+similar recall (events − HyDE −1.01 pp, CI [−2.20, +0.17]) events deliver +6.68 pp denser
+evidence; dominance on both coordinates is not established.
 `results/ever/hyde_raw/`, `results/ever/hyde_token_matched/`.
 
 ## 13. GroupMemBench empty-answer repair — 2026-09-16
@@ -155,7 +156,54 @@ than a demonstrated zero.
 
 Second, the evidence endpoint itself was analysed paired and per question across the whole
 set, and it is the one result that holds: +3.21 pp precision and +0.64 pp recall over all
-2,400 questions, by dominance rather than trade-off, positive in all nine categories,
-replicated on SocialMemBench and dominating matched HyDE. Together these give the
-dissociation the manuscript now reports as its main result. Recompute with
-`analysis/verify_evidence_endpoint.py` (24 checks, offline).
+2,400 questions, with fewer sources and more gold hits rather than a trade-off, positive in
+all nine categories and supported on SocialMemBench. Together these give the manuscript's
+separation of the two endpoints: delivery improves, transfer to accuracy is not confirmed. Recompute with
+`analysis/verify_evidence_endpoint.py` (offline).
+
+## 15. Editorial verification of the manuscript — 2026-09-17
+
+An offline read-only pass over the sealed artifacts before release; no new generations.
+Findings that changed the text:
+
+- **GroupMemBench has no gold evidence.** None of its 745 questions carries source IDs or
+  evidence spans, so evidence delivery cannot be measured there. An earlier statement in this
+  repository that the Group runner "stored verdicts only" misattributed the gap.
+- **Robustness of delivery by project.** Events − RAW precision is positive in each of the
+  five EverMemBench projects (+2.50 to +3.61 pp); leaving out any one project keeps the mean
+  within +3.11 to +3.39 pp. This is sensitivity on this set, not a new registered endpoint.
+- **SocialMemBench intervals** for delivery were recomputed with a network bootstrap
+  (10,000 resamples of 43 networks, seed 20260917): flat +0.90 [+0.66, +1.19], versioned
+  +0.86 [+0.61, +1.16], episodes +0.34 [+0.15, +0.54].
+- **Statistics.** The extreme Wilcoxon p-values of an earlier draft were dropped (the helper
+  used then did not average tied ranks); effect sizes and bootstrap intervals do not depend on
+  it. The Temporal Duration correction is reported as Bonferroni over nine categories
+  (.0402 → about .36, .0479 → about .43); with five projects the exact sign-flip test cannot
+  reach p < .05 (minimum .0625).
+- **Recall versus accuracy.** Gold annotation has a median of 27 anchors per question
+  (IQR 21–37, max 96) against ten returned sources; 316 RAW, 312 EVENTS and 305 EPISODES
+  answers are judged correct with zero delivered gold anchors.
+
+`paper/preprint_ru/verify_editorial.py` produced `editorial_verification.json`; the public
+checks are in `analysis/verify_evidence_endpoint.py`.
+
+## 16. k-sweep: retrieval depth and accuracy — 2026-09-17
+
+Question: is accuracy insensitive to delivery only at k = 10? Hard budget $1 for paid calls,
+sealed directories read only, same answer/judge models, prompts and scoring as the official run.
+
+Phase 1 (offline, 0 API calls). Delivery for RAW and RAW+EVENTS at k = 10, 20, 40 on all
+2,400 questions; the k = 10 rows match the sealed per-question metrics exactly. Events − RAW
+precision +3.21 / +2.51 / +1.68 pp, all intervals above zero, positive in all five projects at
+each k; events never deliver more sources. RAW gold hits per question rise 2.13 → 3.14 → 4.40.
+
+Phase 2 (paid). Stratified sample N = 304 over the nine categories, seed 20260917, sample
+and manifest frozen before any call; k = 10 verdicts reused from the sealed runs, k = 20
+answered and judged anew. Accuracy RAW 49.01 → 48.68, RAW+EVENTS 49.01 → 48.36; RAW@20 −
+RAW@10 −0.33 pp [−4.28, +3.29]; every interval includes zero. Spend $0.7947 with the
+OpenRouter fee factor ($0.7225 at list price), booked per call by a budget guard from
+`response.usage`. The API usage log shows $0.7118 because 66 identical prompts (no event
+document in the top 20) were sent concurrently and the cache logs such payloads once; earlier
+parallel runs may undercount usage the same way (not checked).
+
+`results/ever/ksweep/`; recompute with `analysis/verify_ksweep.py` (55 checks, offline).

@@ -1,97 +1,105 @@
-# Temporal Episodes
+# Event Memory with Addressable Sources
 
-Reproduction package for a study of **provenance-backed memory for long-lived multi-party
-conversations**. Memory is built without access to questions: an LLM extracts events from
-bounded chat sessions, every event keeps verbatim quotes that are checked mechanically
-against the source messages, and events are optionally linked into append-only temporal
-episodes. Derived units are retrieved in one ranked pool together with raw messages, and
-every derived hit expands back into the messages it cites.
+Reproduction package for the preprint *Event Memory with Addressable Sources: evidence
+delivery, temporal questions and transfer boundaries in multi-party dialogues*
+(`paper/preprint_en/`, Russian original in `paper/preprint_ru/`).
 
-The method is evaluated on three external multi-party benchmarks under their official or
-official-compatible harnesses, with controlled ablations and registered protocols.
+Memory is built before any question is read. An LLM extracts events from bounded chat
+sessions; each event carries a self-contained retrieval description, a viewpoint owner, a
+subject, an observed time and immutable *source ID + verbatim quote* pairs that are checked
+mechanically against the source messages. Events are optionally linked into append-only
+episodes. Derived documents are ranked in one pool together with raw messages, and every
+derived hit expands back into the messages it cites.
 
-## The result: a dissociation
+The method is evaluated on three external multi-party benchmarks (EverMemBench 2,400 QA,
+SocialMemBench 1,031, GroupMemBench 745) under their official or official-compatible
+harnesses, with controlled ablations and protocols registered before computation.
 
-The derived layer reliably improves **which evidence reaches the generator**. It does not
-improve **the answer**.
+## Results
 
-**Confirmed — evidence delivery.** Paired over all 2,400 EverMemBench questions, events
-raise the precision of delivered gold sources by **+3.21 pp** (95% CI [+2.84, +3.59],
-p < 10⁻⁵⁹) while also raising recall by **+0.64 pp** ([+0.48, +0.80]). This is not a
-trade: events deliver *fewer* sources than raw retrieval (9.47 vs 10.00, never more) and
-still find *more* gold ones (2.245 vs 2.129 per question). The sign is positive in all
-nine official categories, the interval excludes zero in eight. It replicates on
-SocialMemBench (+0.90 pp precision for flat memory, p < 10⁻³¹) and dominates query-side
-expansion: at statistically indistinguishable recall, events deliver **+6.68 pp**
-([+5.06, +8.27]) denser evidence than matched HyDE.
+**Main result: evidence delivery.** Paired over all 2,400 EverMemBench questions against a
+strong dense RAW baseline, the event index raises the precision of delivered gold sources by
+**+3.21 pp** (95% CI [+2.84, +3.59]) and recall by **+0.64 pp** ([+0.48, +0.80]). It does so
+while returning fewer unique sources (9.47 vs 10.00, and on no question more) and more gold
+hits (2.245 vs 2.129 per question). The direction holds in all five projects (leave-one-project-out
+range +3.11 to +3.39 pp), the sign is positive in all nine categories with the interval
+excluding zero in eight, and it holds at retrieval depth k = 20 (+2.51 pp) and k = 40
+(+1.68 pp). On SocialMemBench, with memory from an earlier extractor, precision rises by
++0.90 pp for flat memory (network bootstrap over 43 networks, [+0.66, +1.19]).
 
-**Not confirmed — answer quality.** None of that converts. Across 2,400 questions micro
-accuracy moves +0.38 pp ([−0.8, +1.6]). A prediction registered before the computation —
-that questions where events deliver strictly better evidence should be answered better —
-fails on the 2,100 questions outside the discovery slice: in that stratum (n = 650) the
-gain is **+0.77 pp, p = .649**. The only nominally significant accuracy gain sits on a
-post-hoc slice and does not survive a Holm correction over nine categories; the endpoint
-whose slice *and* analysis were both fixed in advance (GroupMemBench primary, n = 150) is
-negative.
+**Exploratory signal: Temporal Duration.** On this slice (n = 300) events reach 19.3%
+accuracy against 14.0% for RAW and for matched HyDE, at an approximately equal token budget
+and the same chronological order (+5.33 pp, nominal p = .0402 and .0479). The slice was
+selected post hoc; after a Bonferroni correction over nine categories these become about .36
+and .43, so the signal is robust to the controls but not confirmed.
 
-| Benchmark | Endpoint | Raw | + Episodes | Δ, 95% CI |
+**System level.** The full system reaches 47.16% macro accuracy in an adapter evaluation of
+EverMemBench, above the published memory systems with the same answer model in a descriptive
+comparison (best published: MemOS 42.55%). Our own RAW reaches 46.34%, so most of this level
+comes from retrieval and the answer model.
+
+**What is not established.** A mean accuracy gain from events or an added gain from linking
+into episodes. Transfer across benchmarks is heterogeneous, and no interval excludes zero:
+
+| Benchmark | Endpoint | RAW | + Episodes | Δ, 95% CI |
 |---|---|---:|---:|---|
-| EverMemBench-Dynamic | accuracy, 2,400 QA | 49.5 | 50.2 | +0.8 [−0.5, +2.0] |
-| SocialMemBench | network-weighted mean, 1,031 QA | 35.8 | 36.8 | +1.0 [−0.8, +2.8] |
+| EverMemBench | accuracy, 2,400 QA | 49.46 | 50.21 | +0.75 [−0.5, +2.0] |
+| SocialMemBench | MeanQ ×100, 1,031 QA (network bootstrap) | 35.8 | 36.8 | +1.0 [−0.8, +2.8] |
 | GroupMemBench | registered primary, 150 QA (repaired) | 37.3 | 33.3 | −4.0 [−9.3, +1.3] |
 
-Why the two endpoints differ in what they can resolve: evidence metrics are computed
-mechanically from exposed source IDs and gold anchors, bypassing both generator and judge —
-a rerun of one identical condition reproduced them on **300/300** questions, while accuracy
-flipped **12** verdicts. Accuracy is a noisy proxy with ceilings on easy categories; the
-category with the largest delivery gain (Single-hop, +8.28 pp) sits at 89.7% accuracy and
-gains nothing.
+A check registered before computation (`protocols/original/FRONTIER_MECHANISM_PREDICTION_PROTOCOL.md`)
+tested whether better delivery transfers to answers outside the discovery slice. Where events
+deliver strictly better evidence (n = 650) accuracy changes by +0.77 pp [−1.85, +3.54]: the
+direction matches, the registered criterion is not met. A k-sweep gives the same picture: at
+k = 20 RAW delivers 48% more gold sources than at k = 10, and accuracy on a stratified sample
+of 304 questions changes by −0.33 pp [−4.28, +3.29].
 
-Practical reading: addressable evidence is nearly free ($1.92 per domain ingestion versus
-$32.10 for Hindsight, 0.41 GB, +2 ms), but a gain in answer accuracy should not be planned
-for on today's benchmarks.
+The two endpoints differ in what they can resolve. Evidence metrics are computed from exposed
+source IDs and gold anchors and never pass through the generator or the judge: a rerun of one
+identical condition reproduced them on 300/300 questions, while 12 accuracy verdicts flipped.
 
 ## Repository layout
 
 ```
-reproduction/   exact runners, method code and tests that produced the results (see REDACTIONS.md)
+reproduction/   runners, method code and tests that produced the results (see REDACTIONS.md)
 analysis/       offline verification, LaTeX tables and figures; published baselines
 protocols/      registered protocols and amendments, verbatim
-results/        per-question predictions and judgments (SocialMemBench, EverMemBench),
-                GroupMemBench aggregates only, SHA-256 manifest
-paper/          preprint_en/ and preprint_ru/ — manuscript source and PDF;
-                tables/ and figures/ — generated by analysis/
+results/        per-question predictions and judgments (EverMemBench, SocialMemBench),
+                GroupMemBench aggregates and checksums only, SHA-256 manifest
+paper/          preprint_en/ and preprint_ru/: manuscript source, figure scripts, PDF;
+                tables/ and figures/: generated by analysis/
 ```
 
 ## Quick start
 
 ```bash
 python3 -m pip install -r requirements.lock
-python3 analysis/verify_results.py            # checksums + every accuracy statistic
-python3 analysis/verify_evidence_endpoint.py  # the dissociation result, recomputed
+python3 analysis/verify_results.py            # checksums + accuracy statistics
+python3 analysis/verify_evidence_endpoint.py  # evidence delivery and the registered check
+python3 analysis/verify_ksweep.py             # k = 10 / 20 / 40 sweep
 ```
 
-Both are offline and make no API calls. Re-running the experiments themselves requires
-OpenAI and OpenRouter keys; see `REPRODUCE.md`. The full experiment history, including
-results that were superseded, is in `EXPERIMENT_LOG.md`.
+All three are offline and make no API calls. Re-running the experiments requires OpenAI and
+OpenRouter keys; see `REPRODUCE.md`. The full experiment history, including superseded
+results, is in `EXPERIMENT_LOG.md`.
 
-## Scope and honesty notes
+## Scope
 
-These are adapter evaluations under official harnesses, not official leaderboard
-submissions. The Temporal Duration accuracy effect was found in the same data used for its
-controls, so those controls are mechanistic ablations, not an independent replication.
-Evidence metrics measure **delivery**, not usefulness or semantic faithfulness: a gold
-anchor in context does not mean the generator used it. Base evidence recall is 8.1%, so
-over 90% of gold evidence is retrieved by no condition at all. GroupMemBench evidence
-metrics were never computed — that runner stored verdicts only.
+These are adapter evaluations under official harnesses, not leaderboard submissions;
+comparisons with published systems are descriptive. All Temporal Duration controls use the
+same 300 discovery questions and are not an independent replication. Evidence metrics measure
+**delivery** of annotated support, not context sufficiency, use by the generator or semantic
+faithfulness of the derived text; an independent human audit of events has not been completed.
+GroupMemBench releases no gold source IDs for any of its 745 questions, so evidence delivery
+is not measured there. The work contains no comparison with a plain paraphrase of the same
+messages carrying the same sources, speaker and time fields.
 
 ## Licenses
 
 Code is released under the Apache License 2.0 (`LICENSE`). Benchmark data and everything
-derived from it remain under the upstream terms: SocialMemBench (CC BY 4.0) and
-EverMemBench-Dynamic (Apache 2.0) derived results are included with attribution;
-GroupMemBench publishes no license, so only aggregates and checksums are included. See
-`THIRD_PARTY.md`.
+derived from it remain under the upstream terms: EverMemBench-Dynamic (Apache 2.0) and
+SocialMemBench (CC BY 4.0) derived results are included with attribution; GroupMemBench
+publishes no license, so only aggregates and checksums are included. See `THIRD_PARTY.md`.
 
 ## Citation
 

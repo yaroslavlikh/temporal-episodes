@@ -1,0 +1,19 @@
+{
+  "phase": 1,
+  "ks": [
+    10,
+    20,
+    40
+  ],
+  "conditions": [
+    "RAW",
+    "RAW+EVENTS"
+  ],
+  "row_count": 14400,
+  "identity_fields": [
+    "qa_key",
+    "condition",
+    "k"
+  ],
+  "sha256": "d57953d394c77186e892571070d19c31405b5545ac0a03139de7e3208fe3ddf4"
+}

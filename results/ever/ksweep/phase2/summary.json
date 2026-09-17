@@ -1,0 +1,89 @@
+{
+  "n": 304,
+  "accuracy_percent": {
+    "RAW+EVENTS@10": 49.01315789473684,
+    "RAW+EVENTS@20": 48.35526315789473,
+    "RAW@10": 49.01315789473684,
+    "RAW@20": 48.68421052631579
+  },
+  "comparisons": [
+    {
+      "left": "RAW+EVENTS@10",
+      "right": "RAW@10",
+      "delta_pp": 0.0,
+      "ci95": [
+        -3.6184210526315788,
+        3.6184210526315788
+      ],
+      "left_only_correct": 15,
+      "right_only_correct": 15,
+      "discordant": 30,
+      "mcnemar_p": 1.0
+    },
+    {
+      "left": "RAW+EVENTS@20",
+      "right": "RAW@20",
+      "delta_pp": -0.32894736842105265,
+      "ci95": [
+        -4.276315789473684,
+        3.6184210526315788
+      ],
+      "left_only_correct": 18,
+      "right_only_correct": 19,
+      "discordant": 37,
+      "mcnemar_p": 1.0
+    },
+    {
+      "left": "RAW@20",
+      "right": "RAW@10",
+      "delta_pp": -0.32894736842105265,
+      "ci95": [
+        -4.276315789473684,
+        3.289473684210526
+      ],
+      "left_only_correct": 17,
+      "right_only_correct": 18,
+      "discordant": 35,
+      "mcnemar_p": 1.0
+    },
+    {
+      "left": "RAW+EVENTS@20",
+      "right": "RAW+EVENTS@10",
+      "delta_pp": -0.6578947368421053,
+      "ci95": [
+        -4.934210526315789,
+        3.6184210526315788
+      ],
+      "left_only_correct": 20,
+      "right_only_correct": 22,
+      "discordant": 42,
+      "mcnemar_p": 0.8776143287523155
+    }
+  ],
+  "spend": {
+    "actual_usd_with_fee": 0.7947285499999999,
+    "actual_usd_list": 0.7224804999999999,
+    "actual_basis": "BudgetGuard: response.usage of every create call, times config prices, times fee_factor",
+    "api_usage_log_rows": 633,
+    "api_usage_log_by_phase": {
+      "answer": 541,
+      "judge": 92
+    },
+    "api_usage_log_usd_with_fee": 0.7118008700000001,
+    "answer_calls_sent": 607,
+    "answer_calls_logged": 541,
+    "answer_calls_unlogged": 66,
+    "unlogged_reason": "identical payloads sent concurrently: CachedAPI.chat appends usage only for the call that stores the key first"
+  },
+  "answer_cache": {
+    "new_or_resumed": 607,
+    "sealed_reuse": 1
+  },
+  "judge_parse": {
+    "multiple_choice": 414,
+    "json": 194
+  },
+  "judge_attempts_total": 92,
+  "identical_k_prompt_both_conditions": 66,
+  "identical_answer_among_them": 62
+}

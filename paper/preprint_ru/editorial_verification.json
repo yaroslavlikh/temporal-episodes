@@ -1,0 +1,355 @@
+{
+  "ever": {
+    "RAW": {
+      "n": 2400,
+      "micro": 0.4945833333333333,
+      "macro": 0.46339276046179406,
+      "precision": 0.21287499999999998,
+      "recall": 0.0807631839055052,
+      "sources": 10.0,
+      "gold_hits": 2.12875,
+      "correct_with_zero_gold_hits": 316
+    },
+    "EVENTS": {
+      "n": 2400,
+      "micro": 0.49833333333333335,
+      "macro": 0.4682309661693645,
+      "precision": 0.24497718253968254,
+      "recall": 0.0871318722858795,
+      "sources": 9.472916666666666,
+      "gold_hits": 2.245416666666667,
+      "correct_with_zero_gold_hits": 312
+    },
+    "EPISODES": {
+      "n": 2400,
+      "micro": 0.5020833333333333,
+      "macro": 0.4715665186918339,
+      "precision": 0.22447139151729834,
+      "recall": 0.10754727651219231,
+      "sources": 12.375416666666666,
+      "gold_hits": 2.795,
+      "correct_with_zero_gold_hits": 305
+    }
+  },
+  "same_sources_without_derived": "B1 prepared; no completed artifacts found",
+  "gold_anchor_counts": {
+    "min": 4,
+    "median": 27.0,
+    "mean": 30.12125,
+    "max": 96,
+    "q25_q75": [
+      21.0,
+      37.0
+    ]
+  },
+  "project_effects": [
+    {
+      "topic": "01",
+      "n": 488,
+      "delta_evidence_precision_pp": 2.496747332812906,
+      "delta_evidence_recall_pp": 0.49884586231566447,
+      "delta_correct_pp": -0.4098360655737705
+    },
+    {
+      "topic": "02",
+      "n": 471,
+      "delta_evidence_precision_pp": 3.453560475853469,
+      "delta_evidence_recall_pp": 0.7266847166244393,
+      "delta_correct_pp": 0.6369426751592357
+    },
+    {
+      "topic": "03",
+      "n": 467,
+      "delta_evidence_precision_pp": 3.2242275925359434,
+      "delta_evidence_recall_pp": 0.5144545663182825,
+      "delta_correct_pp": 0.8565310492505354
+    },
+    {
+      "topic": "04",
+      "n": 481,
+      "delta_evidence_precision_pp": 3.6098736098736097,
+      "delta_evidence_recall_pp": 0.7472977510027108,
+      "delta_correct_pp": -0.2079002079002079
+    },
+    {
+      "topic": "05",
+      "n": 493,
+      "delta_evidence_precision_pp": 3.2807720789465207,
+      "delta_evidence_recall_pp": 0.6959014771739106,
+      "delta_correct_pp": 1.0141987829614605
+    }
+  ],
+  "leave_one_project_out_precision_pp": [
+    3.3923175267317527,
+    3.1508018794177426,
+    3.2068336905377777,
+    3.110044087115478,
+    3.191978591821277
+  ],
+  "accuracy_by_category": {
+    "C": {
+      "RAW": 0.7985074626865671,
+      "EVENTS": 0.7910447761194029,
+      "EPISODES": 0.7960199004975125
+    },
+    "MH": {
+      "RAW": 0.1285140562248996,
+      "EVENTS": 0.13253012048192772,
+      "EPISODES": 0.13253012048192772
+    },
+    "P": {
+      "RAW": 0.65807962529274,
+      "EVENTS": 0.6463700234192038,
+      "EPISODES": 0.6416861826697893
+    },
+    "SH": {
+      "RAW": 0.8967136150234741,
+      "EVENTS": 0.8967136150234741,
+      "EPISODES": 0.8779342723004695
+    },
+    "Skill": {
+      "RAW": 0.33727810650887574,
+      "EVENTS": 0.31952662721893493,
+      "EPISODES": 0.3076923076923077
+    },
+    "Style": {
+      "RAW": 0.30113636363636365,
+      "EVENTS": 0.3352272727272727,
+      "EPISODES": 0.3806818181818182
+    },
+    "TP": {
+      "RAW": 0.12333333333333334,
+      "EVENTS": 0.16333333333333333,
+      "EPISODES": 0.2
+    },
+    "Title": {
+      "RAW": 0.4642857142857143,
+      "EVENTS": 0.45918367346938777,
+      "EPISODES": 0.4336734693877551
+    },
+    "U": {
+      "RAW": 0.4626865671641791,
+      "EVENTS": 0.4701492537313433,
+      "EPISODES": 0.47388059701492535
+    }
+  },
+  "social_network_bootstrap": {
+    "RAW+FLAT": {
+      "delta_precision_pp": 0.9019843719164764,
+      "ci_pp": [
+        0.6576409157131551,
+        1.1947107476117333
+      ]
+    },
+    "RAW+VERSIONED": {
+      "delta_precision_pp": 0.8554402274091891,
+      "ci_pp": [
+        0.6103234967668862,
+        1.1622473361072816
+      ]
+    },
+    "RAW+EPISODES": {
+      "delta_precision_pp": 0.3429526848394877,
+      "ci_pp": [
+        0.15216289012746695,
+        0.5381325455407183
+      ]
+    }
+  },
+  "group": {
+    "gold_fields": {
+      "id": 745,
+      "question": 745,
+      "answer": 745,
+      "asking_user_id": 745
+    },
+    "evidence_gap": "No gold source IDs or spans in all 745 QA; recall/precision undefined",
+    "unchanged_answers": 1388,
+    "repaired_answers": 102,
+    "exposed_ids_valid": 10576,
+    "corpus_source_ids": 120000,
+    "accuracy": {
+      "RAW": 0.43087248322147653,
+      "RAW+EPISODES": 0.4147651006711409
+    }
+  },
+  "temporal_accuracy": {
+    "RAW+EPISODES-rerun": 0.2,
+    "RAW-count-matched": 0.13333333333333333,
+    "RAW-token-matched": 0.12333333333333334,
+    "RAW+EVENTS": 0.16333333333333333,
+    "RAW+EVENTS-token-matched": 0.17,
+    "RAW+EVENTS-token-matched-chrono": 0.19333333333333333,
+    "RAW-token-matched-chrono": 0.14,
+    "RAW-token-matched-chrono-relative": 0.08333333333333333,
+    "RAW+EPISODES-chrono": 0.18333333333333332,
+    "HyDE-RAW": 0.12,
+    "HyDE-RAW-token-matched-chrono": 0.14
+  },
+  "token_matching": {
+    "encoding": "o200k_base",
+    "context_only": true,
+    "conditions": {
+      "RAW": {
+        "n": 300,
+        "mean": 2458.0933333333332,
+        "median": 2294.0,
+        "min": 893,
+        "max": 5702
+      },
+      "EVENTS": {
+        "n": 300,
+        "mean": 2456.0833333333335,
+        "median": 2313.5,
+        "min": 893,
+        "max": 5663
+      },
+      "HyDE": {
+        "n": 300,
+        "mean": 2451.4,
+        "median": 2292.0,
+        "min": 911,
+        "max": 5633
+      },
+      "EPISODES": {
+        "n": 300,
+        "mean": 2459.7466666666664,
+        "median": 2310.0,
+        "min": 893,
+        "max": 5694
+      }
+    },
+    "comparisons": {
+      "RAW - EPISODES": {
+        "n": 300,
+        "median_signed": 0.0,
+        "median_abs": 25.0,
+        "iqr_abs": [
+          11.75,
+          38.0
+        ],
+        "p95_abs": 56.10000000000002,
+        "max_abs": 83,
+        "median_abs_percent": 0.994010074411521,
+        "p95_abs_percent": 3.0243574672584073,
+        "max_abs_percent": 4.979811574697174
+      },
+      "EVENTS - EPISODES": {
+        "n": 300,
+        "median_signed": -0.5,
+        "median_abs": 26.0,
+        "iqr_abs": [
+          10.0,
+          43.25
+        ],
+        "p95_abs": 73.10000000000002,
+        "max_abs": 137,
+        "median_abs_percent": 1.07918360561737,
+        "p95_abs_percent": 3.6425797917733416,
+        "max_abs_percent": 8.224755700325733
+      },
+      "HyDE - EVENTS": {
+        "n": 300,
+        "median_signed": -6.0,
+        "median_abs": 25.0,
+        "iqr_abs": [
+          13.0,
+          39.25
+        ],
+        "p95_abs": 55.05000000000001,
+        "max_abs": 97,
+        "median_abs_percent": 1.057599222445209,
+        "p95_abs_percent": 3.2065587449933246,
+        "max_abs_percent": 8.056478405315614
+      },
+      "EVENTS - RAW": {
+        "n": 300,
+        "median_signed": -2.0,
+        "median_abs": 35.0,
+        "iqr_abs": [
+          16.0,
+          58.0
+        ],
+        "p95_abs": 97.0,
+        "max_abs": 139,
+        "median_abs_percent": 1.4760153712798,
+        "p95_abs_percent": 4.602091807292737,
+        "max_abs_percent": 11.46278870829769
+      },
+      "EVENTS - HyDE": {
+        "n": 300,
+        "median_signed": 6.0,
+        "median_abs": 25.0,
+        "iqr_abs": [
+          13.0,
+          39.25
+        ],
+        "p95_abs": 55.05000000000001,
+        "max_abs": 97,
+        "median_abs_percent": 1.0567185543030955,
+        "p95_abs_percent": 3.2166121318902605,
+        "max_abs_percent": 8.76242095754291
+      }
+    }
+  },
+  "inputs_sha256": {
+    "evermembench_temporal_episodes_official_v1/results.jsonl": "fb9646a610a5eba5292205e4b419ad755171b6336327aceeff7eb20ca92ad583",
+    "final_sprint_A_events_full_v1/results.jsonl": "9125c4df5659c830aff35baedd7073da942844901dd24553df9dc10166f32f16",
+    "evermembench_temporal_episodes_official_v1/predictions.jsonl": "2d25c1fd0b884ee40c6605c8bafbef226ea72357b0c62e70b20cfc2fb2c9f8ba",
+    "final_sprint_A_events_full_v1/predictions.jsonl": "7a22e7f7b29d7e129f3d4dac75e10672c2df2b9274ba07d1aaa00911fb346939",
+    "official_sources/EverMemBench-Dynamic/01/qa_01.json": "358e22d138e24c5e655fc2c09e7f63e22e25603a065d65c946ab30ed57884d3c",
+    "official_sources/EverMemBench-Dynamic/02/qa_02.json": "46ac2dbe2e88b0752f9777feae4c430b033137dd84f1fe1bd749338dc4b1b446",
+    "official_sources/EverMemBench-Dynamic/03/qa_03.json": "81b35a8349bdbfb0f5232dfb00a48779170f3eaa2b499ad5b09de5704c19d9e7",
+    "official_sources/EverMemBench-Dynamic/04/qa_04.json": "47579156659cdedab6419d5ffa2f3030ca2a917bd3c3f134eaf16db318769797",
+    "official_sources/EverMemBench-Dynamic/05/qa_05.json": "2e5038135dcc6f8ae98b3bcbf956f0d03f9086335436c84504552a2124910d2b",
+    "frozen/socialmembench_full_official_v1_20260911_184037_MSK/run/results.jsonl": "371b7c95d0e4fd8f09e0fd00a6ceb00fc66fd9e62bf8c3b010feee5f0984796e",
+    "socialmembench_temporal_episodes_official_harness_v1/episode_results.jsonl": "e90a5cc7ee57d77bf8f6501a84d5900a8ac8e2d1e68ea409d86cfe7b6959535a",
+    "official_sources/GroupMemBench/questions/Finance/abstention.jsonl": "e8af614e52f6962c87961182a695f7e56899df316f07f2678649d2a21954c268",
+    "official_sources/GroupMemBench/questions/Finance/knowledge_update.jsonl": "af991804babdeecc0827ec64037355b425699331406a6daf8019ebe27b9f0561",
+    "official_sources/GroupMemBench/questions/Finance/multi_hop.jsonl": "12f689fae2e33f829715c4281208e585b6d06752f1a5e7cb6dd1025c036c0a09",
+    "official_sources/GroupMemBench/questions/Finance/temporal.jsonl": "1d6384a444b9402d432b926c089ba10a623b28cbc94414c4e43090b2bd0e3866",
+    "official_sources/GroupMemBench/questions/Finance/term_ambiguity.jsonl": "e8993f6495e8d32e775c748af477e67054b3bebf442bbba3f73865b18451e688",
+    "official_sources/GroupMemBench/questions/Finance/user_implicit.jsonl": "1720cd5ea652fd83a8b51e2b2ea53a603ceb6652812288f02fc1fecfd3b3d42f",
+    "official_sources/GroupMemBench/questions/Healthcare/abstention.jsonl": "11a47a0a7a1a1f20352ef1f9ba296093361206e661ee0d862d552fa8be51f0cc",
+    "official_sources/GroupMemBench/questions/Healthcare/knowledge_update.jsonl": "0e520375ed9c38f74b05d2e1448bf1e280e330dc3be54e6d2f5481da745bb141",
+    "official_sources/GroupMemBench/questions/Healthcare/multi_hop.jsonl": "2d26f763ee5fff6a168f47c8f9b1447f44c4296e8f725e57ac917576aa1d1e0f",
+    "official_sources/GroupMemBench/questions/Healthcare/temporal.jsonl": "b9939a1094c60f0ab637ef8d2b8b27840ce4ad5b996f01b86aaeb9cffafe8549",
+    "official_sources/GroupMemBench/questions/Healthcare/term_ambiguity.jsonl": "a2383a68b45372ea70c39987ccfa00adce294c1fdaf352bff6c509e044d5b4bd",
+    "official_sources/GroupMemBench/questions/Healthcare/user_implicit.jsonl": "baaa29b89afb87dd685b6f275651262be732d09bb88c610866e18d4c7e1cc35a",
+    "official_sources/GroupMemBench/questions/Manufacturing/abstention.jsonl": "0953d0b3ef3cdbcae9e96224e9df2428ca041948406f9a6aa9af34ac36b527aa",
+    "official_sources/GroupMemBench/questions/Manufacturing/knowledge_update.jsonl": "4417f400aacefddb9e541e7e7cd999740d67a56dbac5f10a405ed01588a2553d",
+    "official_sources/GroupMemBench/questions/Manufacturing/multi_hop.jsonl": "8219f7e8826ad6725fb0e40189b0b2b7c1c545d7a88fa4f8ce1f4e46c6577282",
+    "official_sources/GroupMemBench/questions/Manufacturing/temporal.jsonl": "dcb534a68df66baee63aa4195c9b7101ccbb12ee6c00773e0d6aa8e8a96918fd",
+    "official_sources/GroupMemBench/questions/Manufacturing/term_ambiguity.jsonl": "2066d2408c16f5a5ad1054317b89787a29444aef80daa4c7105fddcbdc99a5ab",
+    "official_sources/GroupMemBench/questions/Manufacturing/user_implicit.jsonl": "15936b79a89357065f1cddefd48cf70c328d1329209f23b851141ed8c7dd68f7",
+    "official_sources/GroupMemBench/questions/Technology/abstention.jsonl": "d3703d6c42d0a9803d3725b2f337c3bfd10ff51952d35abd0c40da713abb6fad",
+    "official_sources/GroupMemBench/questions/Technology/knowledge_update.jsonl": "759ea371f5136761ea1c6518015029e77c70520be646af1c2b2caa5608d3105e",
+    "official_sources/GroupMemBench/questions/Technology/multi_hop.jsonl": "8b0491e08be326a5496c9c9930cf6e310bf01a97b1b0435f6258f20970a1b121",
+    "official_sources/GroupMemBench/questions/Technology/temporal.jsonl": "d957a53dbae86f8b8eefd397b0fa69352da9885b50c51bd68e23d6622dbd55b5",
+    "official_sources/GroupMemBench/questions/Technology/term_ambiguity.jsonl": "ca79a800fb9bc32c95cb1b2fa135495cfd6048815b38f90e58d46c9b75a559a9",
+    "official_sources/GroupMemBench/questions/Technology/user_implicit.jsonl": "62f274b99a5c7203a6a54bfee824c4c97bb3458b8f201f9888ddca233d8d33d7",
+    "final_sprint_D_groupmembench_repair_v2/predictions_v2.jsonl": "20f2c60180a58d37c63f96904896266c8ac5805f83d822d321a34926850c8a96",
+    "groupmembench_temporal_episodes_official_v1/predictions.jsonl": "b72076901af52133aa74b74857784853a89fd7dbe7d6d9de1a66b46dbdec3517",
+    "official_sources/GroupMemBench/data/final/Finance/synthetic_domain_channels_rolevariants_Finance.json": "0dab291e46fc1c32a1c454b80d931bd75fa180bfa063280015d050c09325c0e8",
+    "official_sources/GroupMemBench/data/final/Technology/synthetic_domain_channels_rolevariants_Technology.json": "b2b5b816475a11c11c3ff80bfcfcb157c9ed5f793cd92f0a76d90253d22f9c5d",
+    "official_sources/GroupMemBench/data/final/Healthcare/synthetic_domain_channels_rolevariants_Healthcare.json": "bc665c792847bab5c5e8e35e4d5ce0489e0b1b8217d15dc8261d5f878155a7cf",
+    "official_sources/GroupMemBench/data/final/Manufacturing/synthetic_domain_channels_rolevariants_Manufacturing.json": "cfe2badca60e19f6d75c6d027402d32c0983dc25f06c9aa5fe5b6bf148ffa3c9",
+    "final_sprint_D_groupmembench_repair_v2/results_v2.jsonl": "41ae844eabb292f9d0c7edbeed0476981155340ac85c5ef197d2184fcbd0d4a5",
+    "evermembench_temporal_episodes_official_v1/results_meta.json": "32dc854a30ded8a6ebb45f697f6fad4ed342b46180cec159dfbeafba44cef4dd",
+    "evermembench_temporal_episodes_official_v1/predictions_meta.json": "fa8a34ae21db8ac1c179c00d4530e94066d90209fe39bb9d524829a7d56db749",
+    "final_sprint_A_events_full_v1/results_meta.json": "016b2f9317a3bd46cdbda0057aeb9efd2732e60681d79dd4eb6a992eeb083f68",
+    "final_sprint_A_events_full_v1/predictions_meta.json": "f56a8b293fcb8bcfe3d359392c4169111cc28d22af6e361d5e724ef79fee2257",
+    "final_sprint_D_groupmembench_repair_v2/results_v2_meta.json": "2a83759cec8aa0b72bd5df5f62bf727dd92350443a701649514d5ef135e4d5e5",
+    "final_sprint_D_groupmembench_repair_v2/predictions_v2_meta.json": "e0d3482f2bebd85bd4288217ccc4fbf2fae64e5efac66390ff3c69fb653be488",
+    "evermembench_temporal_budget_control_v1/results.jsonl": "02904a20b908025f3bb44c744e9c5143904b7160b595e51a96d9f964e091b8d9",
+    "evermembench_unlinked_events_control_v1/results.jsonl": "1d383fbff4fceffad8f2f72f4b09a2a6d0b5d61f4df53f7419eb2dec65fa4f4c",
+    "evermembench_chronological_order_control_v2/results.jsonl": "2fe746592501ecae3906d80dd2c3e4a5c24b5b7c30c63b891ee0961e0c77aab3",
+    "final_sprint_B2_episodes_chrono_v1/results.jsonl": "61ebcd6f2b54ccc3814863eebae0e08af7abed64a5a9c762d691cafb7b86d689",
+    "final_sprint_C_hyde_raw_v1/results.jsonl": "93a98e4641db627bd9223c1bb8153c72af199945bcb4759eb62df1c17837e686",
+    "final_sprint_C2_hyde_token_matched_v1/results.jsonl": "7dc30568f46db7b3016927e0900413679a3b4a06b7f1dc0e9a8006378c20003f",
+    "evermembench_chronological_order_control_v2/predictions.jsonl": "3d98438ace10c73d42ddfaff1ec14cd7c87eb32919bb1d000d5325c2cb8b87f7",
+    "final_sprint_C2_hyde_token_matched_v1/predictions.jsonl": "74add803f8bd14ceb1545dc4d373be146de147ba992689a46ac9188f1381c9e7",
+    "final_sprint_B2_episodes_chrono_v1/predictions.jsonl": "7d4375586a3c6651737828a1d4e0c06c822ffcb1ac57a04b989fd13e0305841d"
+  },
+  "verification": "All read inputs unchanged; exact gold intersections independently verified; no API calls"
+}

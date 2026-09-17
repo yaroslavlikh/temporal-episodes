@@ -64,7 +64,7 @@ python3 -m research.groupmembench_parallel_resume --all --workers 16
 ```
 
 `research.paper_runs --group` runs the same pipeline sequentially. Answers and judgments use
-gpt-5 with a 2,048-token completion cap; in the published run 101 of 1,490 answers were empty
+gpt-5 with a 2,048-token completion cap; in the published run 102 of 1,490 answers were empty
 because hidden reasoning exhausted that cap.
 
 ### EverMemBench-Dynamic
@@ -105,6 +105,7 @@ Estimated from recorded token usage at uncached list prices (2026-09-12 snapshot
 | EverMemBench-Dynamic (memory $4.76, embeddings $0.46, answers $3.12, judge $0.55) | $8.88 | about 2.5 h wall clock with five parallel topic shards |
 | Temporal budget control | $1.25 | a few minutes |
 | Unlinked events ablation (+ $0.09 event embeddings) | $0.75 | a few minutes |
+| k-sweep phase 2 (k = 20 answers and judge, N = 304) | $0.79 | about 3 minutes; OpenRouter fee included |
 
 ## Known differences from the original workspace
 
@@ -117,10 +118,10 @@ Estimated from recorded token usage at uncached list prices (2026-09-12 snapshot
 - `test_paper_external_benchmarks.py` needs the official GroupMemBench and EverMemBench sources
   in `reproduction/.research_runs/official_sources/`, which the runners download on first use.
 
-## Verifying the dissociation result
+## Verifying the evidence-delivery result
 
 `analysis/verify_evidence_endpoint.py` recomputes every number behind the evidence-delivery
-result and the registered frontier check, directly from the per-question files in
+result, its per-project sensitivity and the registered frontier check, directly from the per-question files in
 `results/`. It makes no API calls and needs no keys:
 
 ```bash
@@ -131,3 +132,19 @@ It prints each recomputed value next to the one printed in the manuscript and ex
 non-zero if any of them disagree. The frontier check is deliberately included even though
 its registered prediction failed; `protocols/original/FRONTIER_MECHANISM_PREDICTION_PROTOCOL.md`
 states the reading rule that was fixed before the numbers existed.
+
+## The k-sweep
+
+```bash
+python3 analysis/verify_ksweep.py                              # offline, 55 checks
+cd reproduction
+python3 -m research.ksweep_delivery                            # phase 1, no API calls
+python3 -m research.ksweep_accuracy --dry-run                  # sample, prompts, cost estimate
+python3 -m research.ksweep_accuracy --run                      # paid, stops at the budget in the config
+python3 -m research.ksweep_accuracy --report
+```
+
+The runners read the sealed EverMemBench runs from `reproduction/.research_runs/frozen/` and
+write to a new `ksweep_v1_<timestamp>_MSK` directory; prices, fee factor and budget ceilings are
+in `research/ksweep_phase2_config.json`. `ksweep_accuracy.py` reads phase 1 from its `PHASE1`
+constant; point it at your own phase-1 directory. The published phase 2 cost $0.79.
